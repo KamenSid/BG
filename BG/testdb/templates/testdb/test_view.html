@@ -1,0 +1,55 @@
+{% extends 'testdb/base.html' %}
+{% load static %}
+{% load embed_video_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My replays{% endblock %}</title>
+    {% block head_content %}
+
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+    <h4>Profile name: {{ username }}</h4>
+    <h4>Replays posted: {{ replays_count }}</h4>
+    <h4>You have joined on: </h4>
+        <h4>{{ date_joined }}</h4>
+    <br>
+    <h3 style="padding: 30px">My replays!</h3>
+    <table class="responsive-table__container">
+        {% for test_replay in  test_replays %}
+            <tr>
+                <th><h3>{{ test_replay.title }}</h3>
+                        <a href="{% url "update-replay" test_replay.pk %}" class="btn btn-primary">Update</a>
+                        <a href="{% url "delete" test_replay.pk %}" class="btn btn-primary">Delete</a>
+                </th>
+                <td class="object-fit-contain" style="background: darkblue">{% video test_replay.video 'small' %}</td>
+            </tr>
+            <tr>
+                <td><h4>Uploaded by:{{ test_replay.author }} Game:{{ test_replay.game }}</h4>
+                <td><h4>{{ test_replay.description }}</h4></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <h3>Liked Replays:</h3>
+    <table>
+    {% for replay in liked_replays %}
+        <tr>
+        <th>{{ replay.title }}</th>
+        <td style="background: black">{% video replay.video 'small' %}</td>
+            <tr>
+            <td><p>Uploaded by:{{ replay.author }}</p>
+                <p></p>
+            </td>
+            <td><p>Game:{{ replay.game }}</p></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+</body>
+</html>

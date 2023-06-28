@@ -1,0 +1,49 @@
+body {
+  background-color: cadetblue;
+  font-family: "Comic Sans MS";
+}
+h1 {
+  color: green;
+  text-align: center;
+    background-color: lightblue;
+    background-size: 30%;
+}
+
+h2 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+table {
+
+    margin-left: auto;
+    margin-right: auto;
+    background-color: aquamarine;
+}
+
+
+th {
+    row-span: 2;
+    padding: 5px;
+    color: whitesmoke;
+    background-color: darkblue;
+}
+
+form {
+    text-align: center;
+    table-layout: auto;
+}
+
+tr {
+    text-align: center;
+}
+
+a{
+    color: white;
+    text-align: center;
+    text-decoration: None;
+    padding: 3px;
+}
