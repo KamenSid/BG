@@ -1,0 +1,20 @@
+ .container-upload {
+
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input[type="file"] {
+            margin-top: 5px;
+        }
+
+        .btn-primary {
+            margin-top: 10px;
+        }

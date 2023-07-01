@@ -1,0 +1,37 @@
+{% extends 'testdb/base.html' %}
+{% load static %}
+{% load embed_video_tags %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Replay Details{% endblock %}</title>
+        <link href="{% static 'replay_details.css' %}" rel="stylesheet">
+    </head>
+    <div class="replay-details-container">
+        <div class="replay-details">
+            <h2 class="replay-title">{{ replay.title }}</h2>
+            <div class="replay-info">
+                <p class="replay-author">Uploaded by: {{ replay.author }}</p>
+                <p class="replay-game">Game: {{ replay.game }}</p>
+            </div>
+            <div class="replay-video">
+                {% video replay.video %}
+            </div>
+            <p class="replay-description">{{ replay.description }}</p>
+            <div class="replay-likes">
+                <p class="replay-likes-count">Likes: {{ replay.likes.count }}</p>
+                {% for like in replay.likes.all %}
+                            <p class="card-text">{{ like.username }}</p>
+                        {% endfor %}
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'like-replay' replay.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Like</button>
+                </form>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

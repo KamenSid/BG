@@ -1,0 +1,11 @@
+{% extends 'testdb/base.html' %}
+
+{% block content %}
+    <h1>Delete Replay</h1>
+    <p>Are you sure you want to delete {{ replay.title }} by {{ replay.author }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'test_db_base' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

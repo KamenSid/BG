@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from .models import Replay
+from django.views.generic import DetailView, DeleteView
+from BG.forms import DeleteReplayForm
 
 
 def index(request):
-    context = {"replays": []}
     test_replays = Replay.objects.all()
 
     context = {"test_replays": test_replays,
@@ -25,7 +28,7 @@ def index(request):
 def test_view(request):
     user_id = request.user.id
     test_replays = Replay.objects.filter(author=user_id)
-    liked_replays = Replay.objects.filter(like__owner=user_id)
+    liked_replays = Replay.objects.filter(likes__username=request.user.username)
     replays_count = len(test_replays)
     context = {
         "user_id": user_id,
@@ -38,7 +41,17 @@ def test_view(request):
     return render(request, 'testdb/test_view.html', context)
 
 
-def delete_replay(request, pk):
-    test_replay = Replay.objects.all().filter(pk=pk)
-    test_replay.delete()
-    return redirect("index")
+class ReplayDeleteView(DeleteView):
+    model = Replay
+    template_name = "testdb/delete-replay.html"
+    success_url = reverse_lazy("test_db_base")
+    form_class = DeleteReplayForm
+
+
+class ReplayDetailsView(DetailView):
+    model = Replay
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

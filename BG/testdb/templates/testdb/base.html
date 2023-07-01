@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -15,8 +16,8 @@
 
     {% block menu %}
 
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
                 <a class="navbar-brand" href="/">HOME</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
@@ -24,9 +25,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-
-                        {% if username == "Unknown" %}
+                    <ul class="navbar-nav ms-auto">
+                        {% if username == "Unknown"  %}
                             <li class="nav-item">
                                 <a class="nav-link" href={% url "log-in-user" %}>LogIn</a>
                             </li>
@@ -46,10 +46,11 @@
                         {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="/admin">Admin</a>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <div>Logged as: {{ username }}</div>
+            <div class="navbar-text">Logged as: {{ username }}</div>
         </nav>
 
     {% endblock %}

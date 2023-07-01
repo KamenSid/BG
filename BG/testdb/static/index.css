@@ -1,49 +1,93 @@
+
 body {
-  background-color: cadetblue;
-  font-family: "Comic Sans MS";
-}
-h1 {
-  color: green;
-  text-align: center;
-    background-color: lightblue;
-    background-size: 30%;
+    font-family: Arial, sans-serif;
+    background-color: #1c1c1c;
+    margin: 0;
+    padding: 0;
+    color: #fff;
 }
 
-h2 {
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    padding: 30px;
     text-align: center;
+    background-color: #000;
 }
 
-h3 {
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    background-color: #263238;
+    width: 350px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background-color: #262;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
     text-align: center;
+    color: #f7f7f7;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-decoration: none;
 }
 
-table {
-
-    margin-left: auto;
-    margin-right: auto;
-    background-color: aquamarine;
+.card-text {
+    color: #ccc;
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    text-decoration: none;
 }
 
-
-th {
-    row-span: 2;
-    padding: 5px;
-    color: whitesmoke;
-    background-color: darkblue;
+.card-text.author {
+    color: #ff4848;
+    font-weight: bold;
+    text-decoration: none;
 }
 
-form {
-    text-align: center;
-    table-layout: auto;
+.card-text.likes {
+    color: #6eff71;
+    font-weight: bold;
+    text-decoration: none;
 }
 
-tr {
-    text-align: center;
+.video-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
 }
 
-a{
-    color: white;
-    text-align: center;
-    text-decoration: None;
-    padding: 3px;
+.card-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    color: #ff5252;
 }

@@ -41,3 +41,13 @@ def update_replay(request, replay_pk):
         "form": form
     }
     return render(request, template_name="members/update_replay.html", context=context)
+
+
+def like_replay(request, replay_pk):
+    replay = get_object_or_404(Replay, pk=replay_pk)
+    user = request.user
+
+    replay.likes.add(user)
+
+    replay.save()
+    return redirect(request.META['HTTP_REFERER'])

@@ -2,55 +2,34 @@
 {% load static %}
 {% load embed_video_tags %}
 
-
-<!DOCTYPE html>
-<html lang="en">
-
-<link href="{% static 'index.css' %}" rel="stylesheet">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}THIS IS THE INDEX PAGE{% endblock %}</title>
 </head>
 <body>
 {% block content %}
-    <h1 style="padding: 30px">Welcome to BigGains</h1>
-    <div>
-        <h5>{{ message }}</h5>
-    </div>
-    <div style="display: flex; flex-direction: row">
-        {% for test_replay in test_replays %}
-            <div class="card" style="width: 500px; margin: 10px; background: black">
-                <div style="justify-content: center; display: flex; padding-top: 30px">{% video test_replay.video '100x100' %}</div>
-                <div class="card-body" style="background: lightsteelblue">
-                    <div style="display: flex; flex-direction: row">
-                        <p class="card-title" style="text-align: center; color: darkblue">{{ test_replay.title }}</p>
-                    </div>
-                    <br>
-                    <p class="card-text">{{ test_replay.description }}</p>
-                    <p class="card-text" style="color: darkred">Author:</p>
-                    <p class="card-text">{{ test_replay.author.username }}</p>
-                    <p class="card-text" style="color: darkred">Likes: </p>
-                    <p class="card-text">{{ test_replay.like_set.all.count }}</p>
-                    {% for like in test_replay.like_set.all %}
-                        <p class="card-text">{{ like.owner }}</p>
-                    {% endfor %}
-
-
-                </div>
+    <link href="{% static 'index.css' %}" rel="stylesheet">
+    <div class="container">
+        <header class="header">
+            <h1>Welcome to BigGains</h1>
+            <div>
+                <h5>{{ message }}</h5>
             </div>
-        {% endfor %}
-    </div>
-    {#                <th><h3>{{ test_replay.title }}</h3></th>#}
-    {#                <td class="object-fit-contain" style="background: darkblue">{% video test_replay.video 'small' %}</td>#}
-    {#            </tr>#}
-    {#            <tr>#}
-    {#                <td><h4>Uploaded by:{{ test_replay.author }} Game:{{ test_replay.game }}</h4></td>#}
-    {#                <td><h4>{{ test_replay.description }}</h4>#}
-    {#        {% if test_replay.author == username %}#}
-    {#            <a style="color: darkred" href= {% url "delete" test_replay.pk %}> Delete#}
-    {#                Replay </a>#}
-    {#        {% endif %}#}
+        </header>
 
+        <div class="card-container">
+            {% for test_replay in test_replays %}
+                <a href="{% url 'replay-details' test_replay.pk %}" class="card-link">
+                    <div class="card">
+                    <div class="video-wrapper">{% video test_replay.video '300x250' %}</div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{ test_replay.title }}</h3>
+                        <p class="card-text">{{ test_replay.description }}</p>
+                        <p class="card-text author">Author: {{ test_replay.author.username }}</p>
+                        <p class="card-text likes">Likes: {{ test_replay.likes.count }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
-</body>
-</html>

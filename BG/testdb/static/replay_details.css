@@ -1,0 +1,48 @@
+/* replay_details.css */
+
+/* Replay Details Container */
+.replay-details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.replay-details {
+  text-align: center;
+}
+
+.replay-title {
+  font-size: 36px;
+  color: #FFD700;
+  margin-bottom: 20px;
+}
+
+.replay-info {
+  margin-bottom: 10px;
+}
+
+.replay-author,
+.replay-game {
+  font-size: 18px;
+  color: #FFFFFF;
+}
+
+.replay-video {
+  margin: 30px 0;
+}
+
+.replay-description {
+  font-size: 16px;
+  color: #FFFFFF;
+  line-height: 1.5;
+}
+
+.replay-likes {
+  margin-top: 20px;
+}
+
+.replay-likes-count {
+  font-size: 18px;
+  color: #FFD700;
+}
