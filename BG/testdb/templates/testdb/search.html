@@ -1,0 +1,30 @@
+{% extends "testdb/base.html" %}
+{% load static %}
+
+{% block title %} Search {% endblock %}
+{% block content %}
+    <link href="{% static 'search.css' %}" rel="stylesheet">
+    <div class="search-container">
+        <form class="search-bar" method="GET" action="{% url 'search' %}">
+            <label>
+                <input class="search-input" type="text" name="search" placeholder="Search..."/>
+            </label>
+            <button class="search-button" type="submit">Search</button>
+        </form>
+    </div>
+
+    {% if search_results %}
+        <ul class="search-results">
+            {% for result in search_results %}
+                <li class="search-line">
+                <a class="search-link" href="{% url 'replay-details' result.pk %}">
+                    {{ result }} | Likes: {{ result.likes.count }}
+                </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p class="no-results">No results found.</p>
+    {% endif %}
+{% endblock %}

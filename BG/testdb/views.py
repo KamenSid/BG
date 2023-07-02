@@ -38,20 +38,33 @@ def test_view(request):
         "date_joined": request.user.date_joined,
         "liked_replays": liked_replays,
     }
-    return render(request, 'testdb/test_view.html', context)
+    return render(request, 'testdb/profile_view.html', context)
 
 
 class ReplayDeleteView(DeleteView):
     model = Replay
-    template_name = "testdb/delete-replay.html"
+    template_name = "members/delete-replay.html"
     success_url = reverse_lazy("test_db_base")
     form_class = DeleteReplayForm
 
 
 class ReplayDetailsView(DetailView):
     model = Replay
+    template_name = "members/replay_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
         return context
+
+
+def search_view(request):
+    query = request.GET.get('search')
+    if query is None:
+        query = ""
+    search_results = Replay.objects.filter(title__icontains=query)
+    context = {
+        'user': request.user,
+        'search_results': search_results
+    }
+    return render(request, "testdb/search.html", context)
