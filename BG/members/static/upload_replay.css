@@ -1,20 +1,56 @@
- .container-upload {
+.container-upload {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #263238;
+    color: white;
+    text-align: center;
+}
 
-            max-width: 500px;
-            margin: 30px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.container-upload h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+}
 
-        .form-group label {
-            font-weight: bold;
-        }
+.container-upload form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    text-align: center;
 
-        .form-group input[type="file"] {
-            margin-top: 5px;
-        }
+}
 
-        .btn-primary {
-            margin-top: 10px;
-        }
+.container-upload label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.container-upload input[type="text"],
+.container-upload input[type="file"] {
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.container-upload button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container-upload button:hover {
+    background-color: #262;
+}
+
+.container-upload h2 {
+    margin-top: 20px;
+    text-align: center;
+}

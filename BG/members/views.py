@@ -13,7 +13,9 @@ def upload_replay(request):
     if request.method == "POST":
         form = CreateReplay(request.POST)
         if form.is_valid():
-            form.save()
+            replay = form.save(commit=False)
+            replay.author = request.user
+            replay.save()
             context["message"] = "You have uploaded a replay!"
             return redirect("index")
         else:

@@ -1,53 +1,22 @@
 {% extends 'testdb/base.html' %}
 {% load static %}
+
+
+{% block title %}
+Upload Replay
+{% endblock %}
 {% block content %}
-    <head>
-        <link href="{% static 'upload_replay.css' %}" rel="stylesheet">
-        <meta charset="UTF-8">
-        <title>Upload Replay</title>
-
-    </head>
-    <body>
-
-
+    <link href="{% static 'upload_replay.css' %}" rel="stylesheet">
     <div class="container-upload">
         <h1 class="mb-4">Hello, you are about to upload a replay</h1>
-
         <form action="{% url 'upload-replay' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-
-            <div class="form-group">
-                <label for="id_title">Title:</label>
-                <input type="text" id="id_title" name="title" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="id_author">Author:</label>
-                <input type="text" id="id_author" name="author" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="id_video">Video:</label>
-                <input type="file" id="id_video" name="video" class="form-control-file" required>
-            </div>
-
-            <div class="form-group">
-                <label for="id_description">Description:</label>
-                <textarea id="id_description" name="description" class="form-control" rows="4" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="id_game">Game:</label>
-                <input type="text" id="id_game" name="game" class="form-control" required>
-            </div>
+            {{ form.as_div }}
 
             <button type="submit" name="submit" class="btn btn-primary">Submit</button>
         </form>
         {% if message %}
-        <h2 class="mt-4">{{ message }}</h2>
+            <h2 class="mt-4">{{ message }}</h2>
         {% endif %}
     </div>
-
 {% endblock %}
-</body>
-</html>

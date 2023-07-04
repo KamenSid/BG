@@ -12,19 +12,20 @@
             <button class="search-button" type="submit">Search</button>
         </form>
     </div>
+    <div>
+        {% if search_results %}
+            <ul  class="search-results">
+                {% for result in search_results %}
+                    <li class="search-line">
+                        <a class="search-link" href="{% url 'replay-details' result.pk %}">
+                            {{ result }} | Likes: {{ result.likes.count }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
 
-    {% if search_results %}
-        <ul class="search-results">
-            {% for result in search_results %}
-                <li class="search-line">
-                <a class="search-link" href="{% url 'replay-details' result.pk %}">
-                    {{ result }} | Likes: {{ result.likes.count }}
-                </a>
-                </li>
-            {% endfor %}
-        </ul>
-
-    {% else %}
-        <p class="no-results">No results found.</p>
-    {% endif %}
+        {% else %}
+            <p class="no-results">No results found.</p>
+        {% endif %}
+    </div>
 {% endblock %}
