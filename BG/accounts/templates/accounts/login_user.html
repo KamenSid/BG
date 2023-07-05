@@ -13,7 +13,7 @@
 
     <h1 style="padding: 30px">Hello, you are about to LogIn</h1>
 
-    <form method="post">
+    <form method="post" action="{% url 'log-in-user' %}">
     {% csrf_token %}
         {{  form.as_p }}
     <button type="submit" name="submit">Submit</button>

@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from BG.testdb.models import Replay
 from BG.forms import CreateReplay
 
 
+@login_required()
 def upload_replay(request):
     context = {
         "form": None,
