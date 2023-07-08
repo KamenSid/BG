@@ -13,16 +13,20 @@ body {
     padding: 20px;
 }
 
-.header {
-    padding: 30px;
+h1 {
+    font-size: 3rem;
+    color: #fff;
     text-align: center;
-    background-color: #000;
+    padding: 20px;
+    background-color: #262;
+    border-radius: 10px;
 }
 
 .card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding-top: 100px;
 }
 
 .card {
@@ -90,4 +94,16 @@ body {
     text-decoration: none;
     cursor: pointer;
     color: #ff5252;
+}
+
+.navbar-nav .nav-link {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+
+.navbar-nav .nav-link:hover {
+    color: #226622;
+    scale: 120%;
 }

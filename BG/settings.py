@@ -56,15 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BG.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -91,6 +83,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+if DEBUG:
+    AUTH_PASSWORD_VALIDATORS = []
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -99,6 +94,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -106,8 +102,15 @@ STATICFILES_DIRS = [
     BASE_DIR, 'BG/members/static/',
 ]
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+AUTH_USER_MODEL = 'accounts.AppUser'
+
+MEDIA_ROOT = 'media/'

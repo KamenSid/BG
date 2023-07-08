@@ -12,9 +12,7 @@
     <div class="container">
         <header class="header">
             <h1>Welcome to BigGames</h1>
-            <div>
-                <h5>{{ message }}</h5>
-            </div>
+
         </header>
 
         <div class="card-container">
@@ -25,7 +23,7 @@
                     <div class="card-body">
                         <h3 class="card-title">{{ test_replay.title }}</h3>
                         <p class="card-text">{{ test_replay.description }}</p>
-                        <p class="card-text author">Author: {{ test_replay.author.username }}</p>
+                        <p class="card-text author">Author: {{ test_replay.author.appuserprofile.username }}</p>
                         <p class="card-text likes">Likes: {{ test_replay.likes.count }}</p>
                     </div>
                 </div>

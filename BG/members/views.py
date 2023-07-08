@@ -1,36 +1,20 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
 from BG.testdb.models import Replay
 from BG.forms import CreateReplay
 
 
-@login_required()
-def upload_replay(request):
-    context = {
-        "form": None,
-        "message": "",
-        "username": request.user.username
-    }
-    if request.method == "POST":
-        form = CreateReplay(request.POST)
-        if form.is_valid():
-            replay = form.save(commit=False)
-            replay.author = request.user
-            replay.save()
-            context["message"] = "You have uploaded a replay!"
-            return redirect("index")
-        else:
-            context["message"] = "something went wrong, sorry"
+class UploadReplayView(LoginRequiredMixin, CreateView):
+    model = Replay
+    form_class = CreateReplay
+    template_name = 'members/upload_replay.html'
+    success_url = '/'
 
-    else:
-        if not request.user.is_anonymous:
-            context["message"] = "please upload a replay"
-            context["form"] = CreateReplay()
-
-            return render(request, template_name="members/upload_replay.html", context=context)
-
-        return redirect("index")
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 def update_replay(request, replay_pk):

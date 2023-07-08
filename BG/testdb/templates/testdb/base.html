@@ -41,7 +41,7 @@
                                 <a class="nav-link" href={% url "upload-replay" %}>Add Replay</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href={% url "test_db_base" %}>My Profile</a>
+                                <a class="nav-link" href={% url "profile-details" request.user.pk %}>My Profile</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href={% url "log-out-user" %}>LogOut</a>
@@ -53,9 +53,18 @@
                     </ul>
                 </div>
             </div>
-            <div class="navbar-text" style="padding-right: 30px">Logged as: {{ user }}</div>
+            <div class="navbar-text" style="padding-right: 30px">Logged as: {{ request.user.appuserprofile.username }}</div>
         </nav>
 
+    {% endblock %}
+    {% block messages %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     {% endblock %}
 </head>
 <body>
@@ -63,14 +72,6 @@
 {% block content %}
 
 {% endblock %}
-{% block messages %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endblock %}
+
 </body>
 </html>

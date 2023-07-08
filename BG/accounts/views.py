@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from BG.accounts.forms import AppUserCreationForm
+from BG.members.models import AppUserProfile
 
 
 class LogInUserView(LoginView):
@@ -13,22 +15,20 @@ class LogOutUser(LogoutView):
     next_page = 'index'
 
 
-def register_user(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password1"]
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, "Registration success!")
-            return redirect("index")
-    else:
-        form = UserCreationForm()
+class RegisterUserView(CreateView):
+    form_class = AppUserCreationForm
+    template_name = 'accounts/register_user.html'
+    success_url = reverse_lazy('index')
 
-    context = {
-        "username": "Unknown",
-        "form": form
-    }
-    return render(request, "accounts/register_user.html", context)
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        email = form.cleaned_data['email']  # Logging in after registration
+        password = form.cleaned_data['password1']
+        user = authenticate(username=email, password=password)
+        login(self.request, user)
+
+        profile = AppUserProfile(app_user=user)  # Creating Profile for the User
+        profile.save()
+        messages.success(self.request, 'Registration success!')
+        return response
