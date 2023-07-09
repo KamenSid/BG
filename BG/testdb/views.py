@@ -5,6 +5,10 @@ from .models import Replay
 from django.views.generic import DetailView, DeleteView, ListView
 from BG.forms import DeleteReplayForm
 from ..accounts.models import AppUser
+from steam import Steam
+
+with open("steam_api.txt", "r") as file:
+    STEAM_KEY = file.read().strip()
 
 
 class IndexView(ListView):
@@ -19,15 +23,24 @@ class ProfileView(LoginRequiredMixin, DetailView):
     context_object_name = 'appuser'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        steam = Steam(STEAM_KEY)
+        if self.request.user.appuserprofile.steam_id:
+            user_steam_id = self.request.user.appuserprofile.steam_id
+            player_info = steam.users.get_user_details(user_steam_id)['player']
+
         user_id = self.request.user.id
         uploaded_replays = Replay.objects.filter(author=user_id)
         liked_replays = Replay.objects.filter(likes__email=self.request.user.email)
         replays_count = uploaded_replays.count()
+
+        context = super().get_context_data(**kwargs)
         context['test_replays'] = uploaded_replays
         context['replays_count'] = replays_count
         context['date_joined'] = self.request.user.last_login
         context['liked_replays'] = liked_replays
+        if player_info:
+            context['player_info'] = player_info
+            context['player_avatar'] = player_info['avatarfull']
         return context
 
 

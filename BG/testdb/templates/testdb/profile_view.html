@@ -5,52 +5,50 @@
 
 {% block content %}
 
-    <link href="{% static 'profile.css' %}" rel="stylesheet">
-    <div class="profile-details">
-        <h2 class="profile-name">{{ username }}</h2>
-        <div class="profile-info">
-            <p class="replays-posted">Replays posted: {{ replays_count }}</p>
-            <p class="last-log-in">Last LogIn: {{ date_joined }}</p>
-        </div>
+<link href="{% static 'profile.css' %}" rel="stylesheet">
+<div class="profile-details">
+    <h2 class="profile-name">{{ username }}</h2>
+    <div class="profile-info">
+        <p class="replays-posted">Replays posted: {{ replays_count }}</p>
+        <p class="last-log-in">Last LogIn: {{ date_joined }}</p>
     </div>
+</div>
+<h4>Player Info: </h4>
+<img src="{{ player_avatar }}" alt="Avatar">
+<div class="section">
+    <h3 class="section-title">My Replays</h3>
+    <table class="replays-table">
+        {% for test_replay in  test_replays %}
+            <tr class="replay-row">
+                <td class="replay-thumbnail">{% video test_replay.video 'small' %}</td>
+                <td class="replay-details">
+                    <h4 class="replay-title">{{ test_replay.title }}</h4>
+                    <p class="replay-info">Uploaded by: {{ test_replay.author }}</p>
+                    <p class="replay-info">Game: {{ test_replay.game }}</p>
+                    <p class="replay-description">{{ test_replay.description }}</p>
+                    <div class="replay-buttons">
+                        <a href="{% url 'update-replay' test_replay.pk %}" class="btn btn-primary">Update</a>
+                        <a href="{% url 'replay-delete' test_replay.pk %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 
-    <div class="section">
-        <h3 class="section-title">My Replays</h3>
-        <table class="replays-table">
-            {% for test_replay in  test_replays %}
-                <tr class="replay-row">
-                    <td class="replay-thumbnail">{% video test_replay.video 'small' %}</td>
-                    <td class="replay-details">
-                        <h4 class="replay-title">{{ test_replay.title }}</h4>
-                        <p class="replay-info">Uploaded by: {{ test_replay.author }}</p>
-                        <p class="replay-info">Game: {{ test_replay.game }}</p>
-                        <p class="replay-description">{{ test_replay.description }}</p>
-                        <div class="replay-buttons">
-                            <a href="{% url 'update-replay' test_replay.pk %}" class="btn btn-primary">Update</a>
-                            <a href="{% url 'replay-delete' test_replay.pk %}" class="btn btn-danger">Delete</a>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <div class="section">
-        <h3 class="section-title">Liked Replays</h3>
-        <table class="liked-replays-table">
-            {% for replay in liked_replays %}
-                <tr class="replay-row">
-                    <td class="replay-thumbnail">{% video replay.video 'small' %}</td>
-                    <td class="replay-details">
-                        <h4 class="replay-title">{{ replay.title }}</h4>
-                        <p class="replay-info">Uploaded by: {{ replay.author }}</p>
-                        <p class="replay-info">Game: {{ replay.game }}</p>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+<div class="section">
+    <h3 class="section-title">Liked Replays</h3>
+    <table class="liked-replays-table">
+        {% for replay in liked_replays %}
+            <tr class="replay-row">
+                <td class="replay-thumbnail">{% video replay.video 'small' %}</td>
+                <td class="replay-details">
+                    <h4 class="replay-title">{{ replay.title }}</h4>
+                    <p class="replay-info">Uploaded by: {{ replay.author }}</p>
+                    <p class="replay-info">Game: {{ replay.game }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}
-
-</body>
-</html>
