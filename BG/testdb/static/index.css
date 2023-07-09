@@ -107,3 +107,9 @@ h1 {
     color: #226622;
     scale: 120%;
 }
+
+.navbar-brand {
+    color: #226622;
+    font-weight: bold;
+    font-size: 24px;
+}

@@ -24,9 +24,11 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         steam = Steam(STEAM_KEY)
+        player_info = ""
         if self.request.user.appuserprofile.steam_id:
             user_steam_id = self.request.user.appuserprofile.steam_id
             player_info = steam.users.get_user_details(user_steam_id)['player']
+            player_recent_games = steam.users.get_user_recently_played_games(user_steam_id)['games']
 
         user_id = self.request.user.id
         uploaded_replays = Replay.objects.filter(author=user_id)
@@ -41,6 +43,8 @@ class ProfileView(LoginRequiredMixin, DetailView):
         if player_info:
             context['player_info'] = player_info
             context['player_avatar'] = player_info['avatarfull']
+            context['player_recent_games'] = player_recent_games
+
         return context
 
 
