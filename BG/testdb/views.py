@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.urls import reverse_lazy
-from .models import Replay
 from django.views.generic import DetailView, DeleteView, ListView
-from BG.forms import DeleteReplayForm
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
+from .models import Replay
+from BG.forms import DeleteReplayForm, CommentInputForm
 from ..accounts.models import AppUser
 from steam import Steam
 
@@ -61,8 +62,23 @@ class ReplayDetailsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        context['comment_form'] = CommentInputForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentInputForm(request.POST)
+        self.object = self.get_object()
+
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.replay = self.object
+            new_comment.save()
+            return redirect('replay-details', pk=self.object.pk)
+        else:
+            context = self.get_context_data()
+            context['comment_form'] = form
+            return self.render_to_response(context)
 
 
 def search_view(request):

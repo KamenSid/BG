@@ -1,5 +1,6 @@
 from django import forms
 from BG.testdb.models import Replay
+from BG.testdb.models import Comment
 
 
 class CreateReplay(forms.ModelForm):
@@ -22,3 +23,11 @@ class DeleteReplayForm(forms.ModelForm):
 class LogInUser(forms.Form):
     username = forms.CharField(label="Username", max_length=50)
     password = forms.CharField(widget=forms.PasswordInput())
+
+
+class CommentInputForm(forms.ModelForm):
+    content = forms.CharField(label=False, widget=forms.TextInput(attrs={"placeholder": "Your Comment"}))
+
+    class Meta:
+        model = Comment
+        fields = ["content"]
