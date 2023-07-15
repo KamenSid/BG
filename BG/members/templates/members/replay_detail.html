@@ -3,63 +3,58 @@
 {% load embed_video_tags %}
 
 {% block content %}
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Replay Details{% endblock %}</title>
-        <link href="{% static 'BG/testdb/static/replay_details.css' %}" rel="stylesheet">
-    </head>
-    <div class="replay-details-container">
-        <div class="replay-details">
-            <h2 class="replay-title">{{ replay.title }}</h2>
-            <div class="replay-info">
-                <p class="replay-author">Uploaded by: {{ replay.author.appuserprofile.username }}</p>
-                <p class="replay-game">Game: {{ replay.game }}</p>
-            </div>
-            <div class="replay-video">
-                {% video replay.video %}
-            </div>
-            <table>
-                <tr>
-                    <p class="replay-description">{{ replay.description }}</p>
-                    <div class="replay-likes">
-                        <p class="replay-likes-count">Likes: {{ replay.likes.count }}</p>
-
-                        {% for like in replay.likes.all %}
-                            <p class="card-text">{{ like.appuserprofile.username }}</p>
-                        {% endfor %}
-                    </div>
-                </tr>
-                {% if user.is_authenticated %}
+<link href="{% static 'replay_details.css' %}" rel="stylesheet">
+<div class="replay-details-container">
+    <div class="replay-details">
+        <h2 class="replay-title">{{ replay.title }}</h2>
+        <div class="replay-info">
+            <p class="replay-author">Uploaded by: {{ replay.author.appuserprofile.username }}</p>
+            <p class="replay-game">Game: {{ replay.game }}</p>
+        </div>
+        <div class="replay-video">
+            {% video replay.video %}
+        </div>
+        <div class="replay-description">
+            <p>{{ replay.description }}</p>
+        </div>
+        <div class="replay-likes">
+            <p class="replay-likes-count">Likes: {{ replay.likes.count }}</p>
+            {% for like in replay.likes.all %}
+                <p class="card-text">{{ like.appuserprofile.username }}</p>
+            {% endfor %}
+        </div>
+        <div class="replay-likes-button">
+            {% if user.is_authenticated %}
+                {% if replay not in user.liked_by.all %}
                     <form method="post" action="{% url 'like-replay' replay.id %}">
                         {% csrf_token %}
                         <button type="submit">Like</button>
                     </form>
-                    <div class="comment-section">
-                    <div class="comment-form">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <button type="submit">Comment</button>
-                    </form>
                 {% endif %}
-                </div>
-            </table>
-            <div class="comment-section">
-                <ul>
-                    {% for comment in replay.comment_set.all %}
-                        <li>
-                            <strong>Author: {{ comment.author.appuserprofile.username }}</strong>
-                            <h3>{{ comment.content }}</h3>
-                            <p>Posted on: {{ comment.created_at }}</p>
-                        </li>
-                    {% empty %}
-                        <li>No comments yet.</li>
-                    {% endfor %}
-                </ul>
+            {% endif %}
+        </div>
+        <div class="comment-section">
+            <div class="comment-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit">Comment</button>
+                </form>
             </div>
         </div>
+        <div class="comment-section">
+            <ul>
+                {% for comment in replay.comment_set.all %}
+                    <li>
+                        <strong>Author: {{ comment.author.appuserprofile.username }}</strong>
+                        <p>{{ comment.content }}</p>
+                        <p>Posted on: {{ comment.created_at }}</p>
+                    </li>
+                {% empty %}
+                    <li>No comments yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-    </div>
-    </div>
+</div>
 {% endblock %}
-

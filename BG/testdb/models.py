@@ -37,3 +37,6 @@ class Comment(models.Model):
     background_color = models.CharField(max_length=MAX_COLOR_LENGTH, null=True, blank=True)
     font_color = models.CharField(max_length=MAX_COLOR_LENGTH, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
