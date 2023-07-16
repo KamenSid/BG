@@ -5,20 +5,20 @@
 {% block content %}
     <link href="{% static 'search.css' %}" rel="stylesheet">
     <div class="search-container">
-        <form class="search-bar" method="GET" action="{% url 'search' %}">
-            <label>
-                <input class="search-input" type="text" name="search" placeholder="Search..."/>
-            </label>
-            <button class="search-button" type="submit">Search</button>
+        <form method="GET" action="{% url 'search' %}">
+            {{ form.as_p }}
+
+                <button class="search-button" type="submit">Search</button>
+
         </form>
     </div>
     <div>
         {% if search_results %}
-            <ul  class="search-results">
+            <ul class="search-results">
                 {% for result in search_results %}
                     <li class="search-line">
                         <a class="search-link" href="{% url 'replay-details' result.pk %}">
-                            {{ result }} | Likes: {{ result.likes.count }}
+                            {{ result.title }} | Uploaded by: {{ result.author }} | Likes: {{ result.likes.count }}
                         </a>
                     </li>
                 {% endfor %}

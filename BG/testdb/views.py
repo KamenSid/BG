@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, DeleteView, ListView
+from django.views.generic import DetailView, DeleteView, ListView, FormView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from .models import Replay
-from BG.forms import DeleteReplayForm, CommentInputForm
+from BG.forms import DeleteReplayForm, CommentInputForm, SearchForm
 from ..accounts.models import AppUser
 from steam import Steam
 
@@ -52,8 +52,10 @@ class ProfileView(LoginRequiredMixin, DetailView):
 class ReplayDeleteView(LoginRequiredMixin, DeleteView):
     model = Replay
     template_name = "members/delete-replay.html"
-    success_url = reverse_lazy("test_db_base")
     form_class = DeleteReplayForm
+
+    def get_success_url(self):
+        return reverse_lazy("profile-details", kwargs={"pk": self.request.user.pk})
 
 
 class ReplayDetailsView(DetailView):
@@ -81,13 +83,33 @@ class ReplayDetailsView(DetailView):
             return self.render_to_response(context)
 
 
-def search_view(request):
-    query = request.GET.get('search')
-    if query is None:
-        query = ""
-    search_results = Replay.objects.filter(title__icontains=query)
-    context = {
-        'user': request.user,
-        'search_results': search_results
-    }
-    return render(request, "testdb/search.html", context)
+class SearchView(FormView):
+    template_name = 'testdb/search.html'
+    form_class = SearchForm
+
+    def get_queryset(self):
+        query = self.request.GET.get('query', '')
+        game = self.request.GET.get('game')
+
+        search_results = Replay.objects.filter(title__icontains=query)
+
+        if game:
+            search_results = search_results.filter(game=game)
+
+        return search_results
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_results'] = self.get_queryset()
+        return context
+
+# def search_view(request):
+#     query = request.GET.get('search')
+#     if query is None:
+#         query = ""
+#     search_results = Replay.objects.filter(title__icontains=query)
+#     context = {
+#         'user': request.user,
+#         'search_results': search_results
+#     }
+#     return render(request, "testdb/search.html", context)

@@ -21,13 +21,35 @@ class DeleteReplayForm(forms.ModelForm):
 
 
 class LogInUser(forms.Form):
-    username = forms.CharField(label="Username", max_length=50)
+    username = forms.CharField(label="Username",
+                               max_length=50)
     password = forms.CharField(widget=forms.PasswordInput())
 
 
 class CommentInputForm(forms.ModelForm):
-    content = forms.CharField(label=False, widget=forms.TextInput(attrs={"placeholder": "Your Comment"}))
+    content = forms.CharField(label=False,
+                              widget=forms.TextInput(attrs={"placeholder": "Your Comment"}))
 
     class Meta:
         model = Comment
         fields = ["content"]
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label=False,
+                            max_length=100,
+                            required=False,
+                            widget=forms.TextInput(attrs={"placeholder": "Search..."}))
+    game = forms.ChoiceField(label='Game',
+                             choices=[],
+                             required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['game'].choices = self.get_category_choices()
+
+    def get_category_choices(self):
+        games = set(Replay.objects.values_list('game', flat=True).distinct())
+        choices = [('', 'All')]
+        choices.extend([[game_name, game_name] for game_name in games])
+        return choices
