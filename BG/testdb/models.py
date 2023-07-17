@@ -16,7 +16,8 @@ class Replay(models.Model):
 
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
     author = models.ForeignKey(user_model, null=True, blank=True, on_delete=models.CASCADE)
-    video = EmbedVideoField(settings.AUTH_USER_MODEL, blank=True, null=True)
+    video_url = EmbedVideoField(settings.AUTH_USER_MODEL, blank=True, null=True)
+    video_upload = models.FileField(upload_to='replays/', blank=True, null=True)
     description = models.CharField(max_length=DESCRIPTION_MAX_LENGTH, null=True, blank=True)
     likes = models.ManyToManyField(user_model, related_name='liked_by')
     game = models.CharField(max_length=GAME_MAX_LENGTH, default="None")

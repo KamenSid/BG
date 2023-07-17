@@ -51,7 +51,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
 class ReplayDeleteView(LoginRequiredMixin, DeleteView):
     model = Replay
-    template_name = "members/delete-replay.html"
+    template_name = "members/delete_replay.html"
     form_class = DeleteReplayForm
 
     def get_success_url(self):

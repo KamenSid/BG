@@ -25,7 +25,7 @@ class AppUserProfile(models.Model):
     username = models.CharField(max_length=USERNAME_MAX_LENGTH, null=True, blank=True)
     steam_name = models.CharField(max_length=STEAM_NAME_MAX_LENGTH, null=True, blank=True)
     steam_id = models.CharField(null=True, blank=True)
-    picture = models.ImageField(upload_to='profile_pictures/')
+    picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     guild = models.OneToOneField(Guild, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):

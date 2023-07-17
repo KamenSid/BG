@@ -114,3 +114,4 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.AppUser'
 
 MEDIA_ROOT = 'media/'
+MEDIA_URL = '/media/'

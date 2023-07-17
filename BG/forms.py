@@ -1,17 +1,19 @@
 from django import forms
 from BG.testdb.models import Replay
 from BG.testdb.models import Comment
+from BG.members.models import AppUserProfile
 
 
 class CreateReplay(forms.ModelForm):
     title = forms.CharField(label="title", max_length=30)
     game = forms.CharField(label="game", max_length=30)
     description = forms.CharField(label="description", max_length=300)
-    video = forms.CharField(label="video", max_length=200)
+    video_url = forms.CharField(label="video", max_length=200, required=False)
+    video_upload = forms.FileField(required=False)
 
     class Meta:
         model = Replay
-        fields = ("title", "game", "description", "video")
+        fields = ("title", "game", "description", "video_url", "video_upload")
 
 
 class DeleteReplayForm(forms.ModelForm):
@@ -53,3 +55,9 @@ class SearchForm(forms.Form):
         choices = [('', 'All')]
         choices.extend([[game_name, game_name] for game_name in games])
         return choices
+
+
+class AppUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = AppUserProfile
+        fields = "__all__"

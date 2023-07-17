@@ -22,6 +22,9 @@
             <h4>{{ game.name }}</h4>
         {% endfor %}
     {% endif %}
+    <div>
+        <a href="{% url 'update-profile' user.pk %}">Edit Profile</a>
+    </div>
     <div class="section">
         <h3 class="section-title">My Replays</h3>
         <table class="replays-table">

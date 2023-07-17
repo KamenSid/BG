@@ -17,7 +17,11 @@
             {% for test_replay in test_replays %}
                 <a href="{% url 'replay-details' test_replay.pk %}" class="card-link">
                     <div class="card">
-                    <div class="video-wrapper">{% video test_replay.video '300x250' %}</div>
+                        {% if test_replay.video_url %}
+                        <div class="video-wrapper">{% video test_replay.video_url '500x300' %}</div>
+                    {% elif test_replay.video_upload %}
+                        <video src="{{ test_replay.video_upload.url }}" controls></video>
+                    {% endif %}
                     <div class="card-body">
                         <h3 class="card-title">{{ test_replay.title }}</h3>
                         <p class="card-text">{{ test_replay.description }}</p>
