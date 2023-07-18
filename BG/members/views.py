@@ -43,10 +43,14 @@ def like_replay(request, replay_pk):
     return redirect(request.META['HTTP_REFERER'])
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = AppUserProfileForm
     template_name = 'members/update_profile.html'
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, app_user=self.request.user)
+
     def get_success_url(self):
-        return reverse_lazy("profile-details", kwargs={"pk": self.request.user.pk})
+        profile = Profile.objects.filter(username=self.request.user.username)
+        return reverse_lazy("profile-details", kwargs={"pk": profile.pk})

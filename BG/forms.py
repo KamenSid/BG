@@ -60,4 +60,12 @@ class SearchForm(forms.Form):
 class AppUserProfileForm(forms.ModelForm):
     class Meta:
         model = AppUserProfile
-        fields = "__all__"
+        exclude = ['app_user']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance:
+            self.fields['steam_id'].initial = instance.steam_id
+
+

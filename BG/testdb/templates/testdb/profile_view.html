@@ -30,7 +30,7 @@
         <table class="replays-table">
             {% for test_replay in  test_replays %}
                 <tr class="replay-row">
-                    <td class="replay-thumbnail">{% video test_replay.video 'small' %}</td>
+                    <td class="replay-thumbnail">{% video test_replay.video_url 'small' %}</td>
                     <td class="replay-details">
                         <h4 class="replay-title">{{ test_replay.title }}</h4>
                         <p class="replay-info">Uploaded by: {{ test_replay.author }}</p>
@@ -51,7 +51,7 @@
         <table class="liked-replays-table">
             {% for replay in liked_replays %}
                 <tr class="replay-row">
-                    <td class="replay-thumbnail">{% video replay.video 'small' %}</td>
+                    <td class="replay-thumbnail">{% video replay.video_url 'small' %}</td>
                     <td class="replay-details">
                         <h4 class="replay-title">{{ replay.title }}</h4>
                         <p class="replay-info">Uploaded by: {{ replay.author }}</p>
