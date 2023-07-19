@@ -60,7 +60,7 @@ class SearchForm(forms.Form):
 class AppUserProfileForm(forms.ModelForm):
     class Meta:
         model = AppUserProfile
-        exclude = ['app_user']
+        exclude = ['app_user', 'guild', 'steam_name']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

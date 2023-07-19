@@ -1,0 +1,8 @@
+{% extends 'testdb/base.html' %}
+{% block content %}
+<p>Guild name:</p>{{ object.name }}
+    <p>Members:</p>
+    {% for member in object.members.all %}
+    {{ member.appuserprofile.username }}
+    {% endfor %}
+{% endblock %}

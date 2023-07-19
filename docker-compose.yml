@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  django_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=test_database
+      - POSTGRES_USER=kamen
+      - POSTGRES_PASSWORD=kamsid
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=test_database
+      - POSTGRES_USER=kamen
+      - POSTGRES_PASSWORD=kamsid
