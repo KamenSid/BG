@@ -2,37 +2,47 @@
 {% load static %}
 {% load embed_video_tags %}
 
-
 {% block content %}
-
     <link href="{% static 'profile.css' %}" rel="stylesheet">
+
     <div class="profile-details">
-        <h2 class="profile-name">{{ username }}</h2>
+        <h1 class="profile-name">{{ appuser.username }}</h1>
         <div class="profile-info">
             <p class="replays-posted">Replays posted: {{ replays_count }}</p>
-            <p class="last-log-in">Last LogIn: {{ date_joined }}</p>
+            <p class="last-log-in">Last Login: {{ appuser.last_login }}</p>
         </div>
     </div>
-    {% if player_info %}
-        <h4>Player Steam Info: </h4>
-        <h3>{{ player_info.personaname }}</h3>
-        <img src="{{ player_avatar }}" alt="Avatar">
-        <h4>Recent games:</h4>
-        {% for game in player_recent_games %}
-            <h4>{{ game.name }}</h4>
-        {% endfor %}
-    {% endif %}
-    <div>
-        <a href="{% url 'update-profile' user.pk %}">Edit Profile</a>
+    <div class="edit-profile-button">
+        <a href="{% url 'update-profile' appuser.pk %}" class="btn btn-primary">Edit Profile</a>
     </div>
+    {% if player_info %}
+
+            <div class="steam-info">
+                <h2 class="section-title">Player Steam Info</h2>
+                <div class="player-info">
+                    <h3>{{ player_info.personaname }}</h3>
+
+                    <img src="{{ player_avatar }}" alt="Avatar">
+
+                    <h3>Recent Games:</h3>
+                    <ul class="recent-games-list">
+                        {% for game in player_recent_games %}
+                            <li>{{ game.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+    {% endif %}
+
     <div class="section">
-        <h3 class="section-title">My Replays</h3>
+        <h2 class="section-title">My Replays</h2>
         <table class="replays-table">
-            {% for test_replay in  test_replays %}
+            {% for test_replay in test_replays %}
                 <tr class="replay-row">
                     <td class="replay-thumbnail">{% video test_replay.video_url 'small' %}</td>
                     <td class="replay-details">
-                        <h4 class="replay-title">{{ test_replay.title }}</h4>
+                        <h3 class="replay-title">{{ test_replay.title }}</h3>
                         <p class="replay-info">Uploaded by: {{ test_replay.author }}</p>
                         <p class="replay-info">Game: {{ test_replay.game }}</p>
                         <p class="replay-description">{{ test_replay.description }}</p>
@@ -47,13 +57,13 @@
     </div>
 
     <div class="section">
-        <h3 class="section-title">Liked Replays</h3>
+        <h2 class="section-title">Liked Replays</h2>
         <table class="liked-replays-table">
             {% for replay in liked_replays %}
                 <tr class="replay-row">
                     <td class="replay-thumbnail">{% video replay.video_url 'small' %}</td>
                     <td class="replay-details">
-                        <h4 class="replay-title">{{ replay.title }}</h4>
+                        <h3 class="replay-title">{{ replay.title }}</h3>
                         <p class="replay-info">Uploaded by: {{ replay.author }}</p>
                         <p class="replay-info">Game: {{ replay.game }}</p>
                     </td>
@@ -61,4 +71,7 @@
             {% endfor %}
         </table>
     </div>
+
+
+
 {% endblock %}

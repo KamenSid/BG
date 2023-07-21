@@ -1,7 +1,7 @@
 from django import forms
 from BG.testdb.models import Replay
 from BG.testdb.models import Comment
-from BG.members.models import AppUserProfile
+from BG.members.models import AppUserProfile, Guild
 
 
 class CreateReplay(forms.ModelForm):
@@ -45,13 +45,15 @@ class SearchForm(forms.Form):
     game = forms.ChoiceField(label='Game',
                              choices=[],
                              required=False)
+    guild = forms.ModelChoiceField(queryset=Guild.objects.all(), required=False, empty_label="Select a Guild")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['game'].choices = self.get_category_choices()
+        self.fields['game'].choices = self.get_choices(Replay, field="game")
 
-    def get_category_choices(self):
-        games = set(Replay.objects.values_list('game', flat=True).distinct())
+    @staticmethod
+    def get_choices(model, field):
+        games = set(model.objects.values_list(field, flat=True).distinct())
         choices = [('', 'All')]
         choices.extend([[game_name, game_name] for game_name in games])
         return choices
@@ -69,3 +71,7 @@ class AppUserProfileForm(forms.ModelForm):
             self.fields['steam_id'].initial = instance.steam_id
 
 
+class EditGuildForm(forms.ModelForm):
+    class Meta:
+        model = Guild
+        fields = '__all__'

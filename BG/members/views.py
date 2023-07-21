@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
@@ -5,7 +6,18 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild
-from BG.forms import CreateReplay, AppUserProfileForm
+from BG.forms import CreateReplay, AppUserProfileForm, EditGuildForm
+from steam import Steam
+
+AppUser = get_user_model()
+
+with open("steam_api.txt", "r") as file:
+    STEAM_KEY = file.read().strip()
+
+
+def get_profile(user):
+    profile = get_object_or_404(AppUserProfile, app_user_id=user.id)
+    return profile
 
 
 class UploadReplayView(LoginRequiredMixin, CreateView):
@@ -55,6 +67,14 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         profile = get_object_or_404(AppUserProfile, app_user_id=self.request.user.id)
         return reverse_lazy("profile-details", kwargs={"pk": profile.pk})
 
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES, instance=self.get_object())
+        if form.is_valid():
+            form.save()
+            return redirect(self.get_success_url())
+
+        return render(request, self.template_name, {'form': form})
+
 
 class GuildDetailsView(LoginRequiredMixin, DetailView):
     model = Guild
@@ -62,5 +82,51 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         profile = AppUserProfile.objects.get(app_user=self.request.user)
+        try:
+            guild = Guild.objects.filter(id=profile.guild_id).first
+        except self.model.DoesNotExist:
+            guild = None
+        return guild
+
+
+class EditGuildView(LoginRequiredMixin, UpdateView):
+    model = Guild
+    template_name = 'members/guild_update.html'
+    form_class = EditGuildForm
+    success_url = reverse_lazy('guild-details')
+
+    def get_object(self, queryset=None):
+        profile = get_profile(self.request.user)
         guild = Guild.objects.get(id=profile.guild_id)
         return guild
+
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = AppUser
+    template_name = 'members/profile_view.html'
+    context_object_name = 'appuser'
+
+    def get_context_data(self, **kwargs):
+        steam = Steam(STEAM_KEY)
+        player_info = ""
+        if self.request.user.appuserprofile.steam_id:
+            user_steam_id = self.request.user.appuserprofile.steam_id
+            player_info = steam.users.get_user_details(user_steam_id)['player']
+            player_recent_games = steam.users.get_user_recently_played_games(user_steam_id)['games']
+
+        user_id = self.request.user.id
+        uploaded_replays = Replay.objects.filter(author=user_id)
+        liked_replays = Replay.objects.filter(likes__email=self.request.user.email)
+        replays_count = uploaded_replays.count()
+
+        context = super().get_context_data(**kwargs)
+        context['test_replays'] = uploaded_replays
+        context['replays_count'] = replays_count
+        context['date_joined'] = self.request.user.last_login
+        context['liked_replays'] = liked_replays
+        if player_info:
+            context['player_info'] = player_info
+            context['player_avatar'] = player_info['avatarfull']
+            context['player_recent_games'] = player_recent_games
+
+        return context

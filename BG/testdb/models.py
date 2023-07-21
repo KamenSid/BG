@@ -25,6 +25,12 @@ class Replay(models.Model):
     class Meta:
         ordering = ['title']
 
+        permissions = [
+            ('can_add_replay', 'Can add replay'),
+            ('can_change_replay', 'Can change replay'),
+            ('can_delete_replay', 'Can delete replay'),
+        ]
+
     def __str__(self):
         return f"{self.title} by {self.author}"
 

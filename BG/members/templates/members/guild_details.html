@@ -1,8 +1,14 @@
 {% extends 'testdb/base.html' %}
 {% block content %}
-<p>Guild name:</p>{{ object.name }}
-    <p>Members:</p>
-    {% for member in object.members.all %}
-    {{ member.appuserprofile.username }}
-    {% endfor %}
+    {% if guild %}
+        <p>Guild name:</p>{{ object.name }}
+        <p>Members:</p>
+        {% for member in object.members.all %}
+            {{ member.appuserprofile.username }}
+        {% endfor %}
+        <a href="{% url 'guild-edit' %}">Edit Guild</a>
+    {% else %}
+        <h1>You are not part of a guild.</h1>
+    {% endif %}
 {% endblock %}
+

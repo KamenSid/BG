@@ -11,13 +11,12 @@
 <body>
 {% block content %}
 
-    <h1 style="padding: 30px">Hello, you are about to update a replay</h1>
-    <h2>This is: {{ replay_name }}</h2>
-        <form method="post">
+    <h1 style="padding: 30px">You are about to update replay: {{ replay_name }}</h1>
+    <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" name="submit">Update</button>
-        </form>
+    </form>
 
     <h2>{{ message }}</h2>
 {% endblock %}

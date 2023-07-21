@@ -6,10 +6,13 @@
     <link href="{% static 'search.css' %}" rel="stylesheet">
     <div class="search-container">
         <form method="GET" action="{% url 'search' %}">
-            {{ form.as_p }}
+            {% csrf_token %}
+            {{ form.query }}
+            <br>
+            {{ form.game }}
+            {{ form.guild }}
 
-                <button class="search-button" type="submit">Search</button>
-
+            <button class="search-button" type="submit">Search</button>
         </form>
     </div>
     <div>
