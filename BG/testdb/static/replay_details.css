@@ -1,28 +1,26 @@
-/* replay_details.css */
-
-/* Replay Details Container */
-.replay-details-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
 
 .replay-details {
-    max-width: 900px;
-    margin: 0 auto;
+    position: relative;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 30px auto;
     padding: 20px;
     background-color: #263238;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: #262;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+
 }
 
 .replay-title {
     font-size: 24px;
-    color: #262;
+    color: gold;
     margin-bottom: 20px;
+    background-color: #262;
+    text-align: center;
+    border-radius: 5px;
+    padding: 3px;
 }
 
 .replay-info {
@@ -38,10 +36,16 @@
 }
 
 .replay-video {
-    margin: 30px 0;
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 .replay-description p {
+    position: relative;
     font-size: 16px;
     color: gold;
     line-height: 1.5;
@@ -54,8 +58,8 @@
     justify-content: space-between;
 }
 
-.replay-like-button {
-    background-color: #4caf50;
+.replay-likes-button {
+    background-color: #262;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
@@ -63,9 +67,9 @@
 
 }
 
-.replay-like-button:hover {
+.replay-likes-button:hover {
     background-color: #45a049;
-    color: #ff4848;
+    color: gold;
 }
 
 .replay-likes-count {
@@ -127,7 +131,7 @@
 
 .comment-section .comment-form button {
     padding: 10px 20px;
-    background-color: #4caf50;
+    background-color: #262;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -137,7 +141,7 @@
 
 .comment-section .comment-form button:hover {
     background-color: #45a049;
-    color: #ff4848;
+    color: gold;
 }
 
 .comment-section ul li:before {

@@ -3,8 +3,8 @@
 {% load embed_video_tags %}
 
 {% block content %}
-<link href="{% static 'replay_details.css' %}" rel="stylesheet">
-<div class="replay-details-container">
+    <link href="{% static 'replay_details.css' %}" rel="stylesheet">
+
     <div class="replay-details">
         <h2 class="replay-title">{{ replay.title }}</h2>
         <div class="replay-info">
@@ -12,7 +12,7 @@
             <p class="replay-game">Game: {{ replay.game }}</p>
         </div>
         <div class="replay-video">
-            {% video replay.video_url %}
+            {% video replay.video_url "large" %}
         </div>
         <div class="replay-description">
             <p>{{ replay.description }}</p>
@@ -23,14 +23,18 @@
                 <p class="card-text">{{ like.appuserprofile.username }}</p>
             {% endfor %}
         </div>
-        <div class="replay-likes-button">
+        <div>
             {% if user.is_authenticated %}
-                {% if replay not in user.liked_by.all %}
-                    <form method="post" action="{% url 'like-replay' replay.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Like</button>
-                    </form>
+                <a href="{% url 'like-replay' replay.pk %}">
+                    <button class="replay-likes-button">Like</button>
+                </a>
+                {% if user.is_superuser %}
+                    <a href="{% url 'replay-delete' replay.pk %}">
+                        <button class="replay-delete-button">Delete</button>
+                    </a>
                 {% endif %}
+            {% else %}
+                <p>Please login to like this replay.</p>
             {% endif %}
         </div>
         <div class="comment-section">
@@ -56,5 +60,5 @@
             </ul>
         </div>
     </div>
-</div>
+
 {% endblock %}

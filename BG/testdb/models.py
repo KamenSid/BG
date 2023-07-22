@@ -1,9 +1,7 @@
 from django.contrib.auth import get_user_model
 from embed_video.fields import EmbedVideoField
-
 from django.db import models
 from django.contrib.auth.models import User
-
 from BG import settings
 
 user_model = get_user_model()
@@ -19,7 +17,6 @@ class Replay(models.Model):
     video_url = EmbedVideoField(settings.AUTH_USER_MODEL, blank=True, null=True)
     video_upload = models.FileField(upload_to='replays/', blank=True, null=True)
     description = models.CharField(max_length=DESCRIPTION_MAX_LENGTH, null=True, blank=True)
-    likes = models.ManyToManyField(user_model, related_name='liked_by')
     game = models.CharField(max_length=GAME_MAX_LENGTH, default="None")
 
     class Meta:

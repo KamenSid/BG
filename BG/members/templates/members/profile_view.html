@@ -25,6 +25,7 @@
                     <img src="{{ player_avatar }}" alt="Avatar">
 
                     <h3>Recent Games:</h3>
+
                     <ul class="recent-games-list">
                         {% for game in player_recent_games %}
                             <li>{{ game.name }}</li>
@@ -43,7 +44,6 @@
                     <td class="replay-thumbnail">{% video test_replay.video_url 'small' %}</td>
                     <td class="replay-details">
                         <h3 class="replay-title">{{ test_replay.title }}</h3>
-                        <p class="replay-info">Uploaded by: {{ test_replay.author }}</p>
                         <p class="replay-info">Game: {{ test_replay.game }}</p>
                         <p class="replay-description">{{ test_replay.description }}</p>
                         <div class="replay-buttons">

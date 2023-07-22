@@ -21,7 +21,7 @@
                 {% for result in search_results %}
                     <li class="search-line">
                         <a class="search-link" href="{% url 'replay-details' result.pk %}">
-                            {{ result.title }} | Uploaded by: {{ result.author }} | Likes: {{ result.likes.count }}
+                            {{ result.title }} | Uploaded by: {{ result.author.appuserprofile.username }} | Likes: {{ result.like_set.count }}
                         </a>
                     </li>
                 {% endfor %}

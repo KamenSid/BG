@@ -1,14 +1,39 @@
 {% extends 'testdb/base.html' %}
-{% block content %}
-    {% if guild %}
-        <p>Guild name:</p>{{ object.name }}
-        <p>Members:</p>
-        {% for member in object.members.all %}
-            {{ member.appuserprofile.username }}
-        {% endfor %}
-        <a href="{% url 'guild-edit' %}">Edit Guild</a>
-    {% else %}
-        <h1>You are not part of a guild.</h1>
-    {% endif %}
-{% endblock %}
+{% load static %}
 
+{% block content %}
+    <link href="{% static 'guild_details.css' %}" rel="stylesheet">
+    <div class="guild-details-container">
+        {% if guild %}
+            <h2 class="guild-name">{{ object.name }}</h2>
+            <div class="guild-info">
+
+                <h3>Members:</h3>
+                <ul class="guild-members-list">
+                    {% for member in members %}
+                        <li>{{ member.appuserprofile.username }}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+<br>
+            <div class="replays-by-guild">
+                <h3>Replays by the Guild</h3>
+                <ul class="guild-replays-list">
+                    {% for replay in replays_by_members %}
+                        <li><a class="replay-link" href="{% url 'replay-details' replay.pk %}">{{ replay.title }}</a>
+                            <br>
+                            Posted by: {{ replay.author.appuserprofile.username }} | Likes: {{ replay.like_set.count }}</li>
+                    {% endfor %}
+                </ul>
+                <p>Total Guild Likes: {{ total_guild_likes }}</p>
+            </div>
+
+            <div class="edit-guild-link">
+                <a href="{% url 'guild-edit' %}">Edit Guild</a>
+            </div>
+        {% else %}
+            <h1>You are not part of a guild.</h1>
+        {% endif %}
+    </div>
+{% endblock %}

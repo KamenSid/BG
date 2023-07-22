@@ -56,6 +56,7 @@ class SearchView(FormView):
         game = self.request.GET.get('game')
         guild = self.request.GET.get('guild')
 
+
         search_results = Replay.objects.filter(title__icontains=query)
 
         if game:

@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView
 from BG.testdb.models import Replay
-from BG.members.models import AppUserProfile, Guild
+from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm, EditGuildForm
 from steam import Steam
 
@@ -45,14 +47,15 @@ def update_replay(request, replay_pk):
     return render(request, template_name="members/update_replay.html", context=context)
 
 
+@login_required
 def like_replay(request, replay_pk):
     replay = get_object_or_404(Replay, pk=replay_pk)
     user = request.user
-
-    replay.likes.add(user)
-
-    replay.save()
-    return redirect(request.META['HTTP_REFERER'])
+    if Like.objects.filter(user=user, replay=replay).exists():
+        Like.objects.filter(user=user, replay=replay).delete()
+    else:
+        Like.objects.create(user=user, replay=replay)
+    return redirect('replay-details', pk=replay_pk)
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
@@ -83,10 +86,24 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         profile = AppUserProfile.objects.get(app_user=self.request.user)
         try:
-            guild = Guild.objects.filter(id=profile.guild_id).first
+            guild = Guild.objects.filter(id=profile.guild_id).first()
         except self.model.DoesNotExist:
             guild = None
         return guild
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        members = self.object.members.all()
+        replays_by_guild_members = Replay.objects.filter(author__in=members)
+        total_guild_likes = 0
+        for replay in replays_by_guild_members:
+            total_guild_likes += replay.like_set.count()
+
+        context['replays_by_members'] = replays_by_guild_members
+        context['total_guild_likes'] = total_guild_likes
+        context['members'] = members
+
+        return context
 
 
 class EditGuildView(LoginRequiredMixin, UpdateView):
@@ -116,7 +133,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
         user_id = self.request.user.id
         uploaded_replays = Replay.objects.filter(author=user_id)
-        liked_replays = Replay.objects.filter(likes__email=self.request.user.email)
+        liked_replays = Replay.objects.filter(like__user=user_id)
         replays_count = uploaded_replays.count()
 
         context = super().get_context_data(**kwargs)

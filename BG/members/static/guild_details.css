@@ -1,0 +1,76 @@
+
+.guild-details-container {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #263238;
+    box-shadow: #262;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.guild-name {
+    color: gold;
+}
+
+.guild-info {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    align-self: flex-start;
+}
+
+.guild-info h2 {
+    color: gold;
+}
+
+.replays-by-guild h3 {
+    color: gold;
+}
+
+.guild-members-list,
+.guild-replays-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+
+}
+
+.guild-members-list li,
+.guild-replays-list li {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #262;
+}
+
+.replay-link {
+    text-decoration: None;
+    color: #FFFFFF;
+}
+
+.replay-link:hover {
+    cursor: pointer;
+    color: gold;
+}
+.edit-guild-link {
+    margin-top: 20px;
+}
+
+.edit-guild-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.edit-guild-link a:hover {
+    background-color: #45a049;
+    color: gold;
+}

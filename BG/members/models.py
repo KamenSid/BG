@@ -32,3 +32,12 @@ class AppUserProfile(models.Model):
         if not self.username:
             self.username = self.app_user.email.split('@')[0]
         super().save(*args, **kwargs)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.DO_NOTHING)
+    replay = models.ForeignKey(Replay, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} liked {self.replay}"
