@@ -84,25 +84,20 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
     template_name = 'members/guild_details.html'
 
     def get_object(self, queryset=None):
-        profile = AppUserProfile.objects.get(app_user=self.request.user)
-        try:
-            guild = Guild.objects.filter(id=profile.guild_id).first()
-        except self.model.DoesNotExist:
-            guild = None
+        guild = self.request.user.appuserprofile.guild
         return guild
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members = self.object.members.all()
-        replays_by_guild_members = Replay.objects.filter(author__in=members)
-        total_guild_likes = 0
-        for replay in replays_by_guild_members:
-            total_guild_likes += replay.like_set.count()
-
-        context['replays_by_members'] = replays_by_guild_members
-        context['total_guild_likes'] = total_guild_likes
-        context['members'] = members
-
+        if self.object:
+            members = self.object.members.all()
+            replays_by_guild_members = Replay.objects.filter(author__in=members)
+            total_guild_likes = 0
+            for replay in replays_by_guild_members:
+                total_guild_likes += replay.like_set.count()
+            context['replays_by_members'] = replays_by_guild_members
+            context['total_guild_likes'] = total_guild_likes
+            context['members'] = members
         return context
 
 
@@ -113,8 +108,7 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('guild-details')
 
     def get_object(self, queryset=None):
-        profile = get_profile(self.request.user)
-        guild = Guild.objects.get(id=profile.guild_id)
+        guild = self.request.user.guild.first()
         return guild
 
 

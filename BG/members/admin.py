@@ -1,5 +1,17 @@
 from django.contrib import admin
 from .models import Guild, AppUserProfile
 
-admin.site.register(Guild)
-admin.site.register(AppUserProfile)
+
+class AppUserProfileAdmin(admin.ModelAdmin):
+    list_display = ['username', 'steam_name', 'steam_id', 'picture', 'guild']
+    list_filter = ['guild']
+    search_fields = ['username', 'guild__name']
+
+
+class GuildAdmin(admin.ModelAdmin):
+    list_display = ['name', 'leader']
+    search_fields = ['name']
+
+
+admin.site.register(Guild, GuildAdmin)
+admin.site.register(AppUserProfile, AppUserProfileAdmin)

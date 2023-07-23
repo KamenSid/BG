@@ -42,6 +42,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         blank=False
     )
 
+    is_superuser = models.BooleanField(
+        default=False
+    )
+
     is_staff = models.BooleanField(
         default=False
     )

@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 from .models import Replay
 from BG.forms import DeleteReplayForm, CommentInputForm, SearchForm
+from ..members.models import Guild
 
 
 class IndexView(ListView):
@@ -56,14 +57,14 @@ class SearchView(FormView):
         game = self.request.GET.get('game')
         guild = self.request.GET.get('guild')
 
-
         search_results = Replay.objects.filter(title__icontains=query)
 
         if game:
             search_results = search_results.filter(game=game)
 
         if guild:
-            search_results = search_results.filter(author__appuserprofile__guild=guild)
+
+            search_results = search_results.filter(author__appuserprofile__guild_id=guild)
         return search_results
 
     def get_context_data(self, **kwargs):

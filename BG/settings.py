@@ -5,13 +5,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure--)ubmle3!hlyxaywf%wti!*biwuzr15ib2!e*k*ye_dlu0$-+2'
 
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG') == "True"
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'test_database'),
         'USER': os.getenv('DB_USER', 'kamen'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'kamsid'),

@@ -1,23 +1,26 @@
 version: '3'
-
 services:
-  django_app:
-
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app:
+    build: ./BG
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./BG/:/usr/src/app/
     ports:
       - "8000:8000"
-    links:
-      - db
     env_file:
       - ./envs/.env
-#    volumes:
+    depends_on:
+      - db
 
   db:
     image: postgres
-
+    restart: always
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=test_database
       - POSTGRES_USER=kamen
       - POSTGRES_PASSWORD=kamsid
+      - PGDATA:/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data

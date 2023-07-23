@@ -1,13 +1,27 @@
 {% extends 'testdb/base.html' %}
+{% load static %}
 {% block content %}
+    <link href="{% static 'update_profile.css' %}" rel="stylesheet">
 
+    <div class="update-profile-container">
+        <h1 class="update-profile-title">Update Your Profile</h1>
+        <form method="post" enctype="multipart/form-data" class="update-profile-form">
+            {% csrf_token %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <input type="submit" value="Save">
-</form>
-
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.steam_id.id_for_label }}">Steam ID:</label>
+                {{ form.steam_id }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.picture.id_for_label }}">Profile Picture:</label>
+                {{ form.picture }}
+            </div>
+            <input type="submit" value="Save" class="btn btn-primary">
+        </form>
+    </div>
 
 {% endblock %}

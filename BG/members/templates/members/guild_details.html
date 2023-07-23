@@ -16,22 +16,24 @@
                 </ul>
 
             </div>
-<br>
+            <br>
             <div class="replays-by-guild">
                 <h3>Replays by the Guild</h3>
                 <ul class="guild-replays-list">
                     {% for replay in replays_by_members %}
                         <li><a class="replay-link" href="{% url 'replay-details' replay.pk %}">{{ replay.title }}</a>
                             <br>
-                            Posted by: {{ replay.author.appuserprofile.username }} | Likes: {{ replay.like_set.count }}</li>
+                            Posted by: {{ replay.author.appuserprofile.username }} | Likes: {{ replay.like_set.count }}
+                        </li>
                     {% endfor %}
                 </ul>
                 <p>Total Guild Likes: {{ total_guild_likes }}</p>
             </div>
-
-            <div class="edit-guild-link">
-                <a href="{% url 'guild-edit' %}">Edit Guild</a>
-            </div>
+            {% if object.leader_id == user.id %}
+                <div class="edit-guild-link">
+                    <a href="{% url 'guild-edit' %}">Edit Guild</a>
+                </div>
+            {% endif %}
         {% else %}
             <h1>You are not part of a guild.</h1>
         {% endif %}
