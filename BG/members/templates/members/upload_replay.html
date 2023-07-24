@@ -8,7 +8,7 @@ Upload Replay
 {% block content %}
     <link href="{% static 'upload_replay.css' %}" rel="stylesheet">
     <div class="container-upload">
-        <h1 class="mb-4">Hello, you are about to upload a replay</h1>
+        <h1 class="mb-4">You are about to upload a replay</h1>
         <form action="{% url 'upload-replay' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_div }}

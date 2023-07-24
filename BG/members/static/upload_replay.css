@@ -6,18 +6,19 @@
     background-color: #263238;
     color: white;
     text-align: center;
+
 }
 
 .container-upload h1 {
     margin-bottom: 20px;
     text-align: center;
-    color: white;
+    color: gold;
 }
 
 .container-upload form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
     gap: 10px;
     font-weight: bold;
     text-align: center;
@@ -39,7 +40,7 @@
 
 .container-upload button {
     padding: 10px 20px;
-    background-color: #4caf50;
+    background-color: #262;
     color: white;
     border: none;
     border-radius: 5px;
@@ -47,10 +48,12 @@
 }
 
 .container-upload button:hover {
-    background-color: #262;
+    background-color: #4caf50;
+    color: gold;
 }
 
 .container-upload h2 {
     margin-top: 20px;
     text-align: center;
+
 }

@@ -5,15 +5,23 @@ from BG.members.models import AppUserProfile, Guild
 
 
 class CreateReplay(forms.ModelForm):
-    title = forms.CharField(label="title", max_length=30)
-    game = forms.CharField(label="game", max_length=30)
-    description = forms.CharField(label="description", max_length=300)
-    video_url = forms.CharField(label="video", max_length=200, required=False)
-    video_upload = forms.FileField(required=False)
+    MAX_LENGTH_SMALL = 30
+    MAX_LENGTH_LARGE = 300
+    title = forms.CharField(label="", max_length=MAX_LENGTH_SMALL,
+                            widget=forms.TextInput(attrs={'placeholder': 'Title'}))
+    game = forms.CharField(label="", max_length=MAX_LENGTH_SMALL,
+                           widget=forms.TextInput(attrs={'placeholder': 'Game'}))
+    description = forms.CharField(label="", max_length=MAX_LENGTH_LARGE,
+                                  widget=forms.TextInput(attrs={'placeholder': 'Description'}))
+    video_url = forms.CharField(label="", max_length=MAX_LENGTH_LARGE,
+                                required=False, widget=forms.TextInput(attrs={'placeholder': 'Video URL'}))
+    video_upload = forms.FileField(label="", required=False,
+                                   widget=forms.TextInput(
+                                       attrs={'placeholder': 'Upload video file', 'disabled': 'disabled'}))
 
     class Meta:
         model = Replay
-        fields = ("title", "game", "description", "video_url", "video_upload")
+        fields = ("title", "game", "description", "video_url")
 
 
 class DeleteReplayForm(forms.ModelForm):
@@ -72,6 +80,16 @@ class AppUserProfileForm(forms.ModelForm):
 
 
 class EditGuildForm(forms.ModelForm):
+    MAX_LENGTH = 50
+    MAX_LENGTH_URL = 300
+
+    name = forms.CharField(label="", max_length=MAX_LENGTH,
+                           widget=forms.TextInput(attrs={'placeholder': 'Guild Name'}))
+    leader = forms.CharField(label="", max_length=MAX_LENGTH,
+                             widget=forms.TextInput(attrs={'placeholder': 'Guild Leader'}))
+    banner = forms.URLField(label="", max_length=MAX_LENGTH_URL,
+                            required=False, widget=forms.TextInput(attrs={'placeholder': 'Guild Banner'}))
+
     class Meta:
         model = Guild
-        fields = '__all__'
+        fields = ('name', 'leader', 'banner')

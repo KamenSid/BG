@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -33,6 +32,7 @@ class UploadReplayView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+@login_required
 def update_replay(request, replay_pk):
     replay = get_object_or_404(Replay, pk=replay_pk)
     form = CreateReplay(request.POST or None, instance=replay)
@@ -108,8 +108,8 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('guild-details')
 
     def get_object(self, queryset=None):
-        guild = self.request.user.guild.first()
-        return guild
+        guild_obj = self.request.user.guild.first()
+        return guild_obj
 
 
 class ProfileView(LoginRequiredMixin, DetailView):

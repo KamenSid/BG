@@ -1,5 +1,4 @@
-
-.update-profile-container {
+.container-guild-update {
     max-width: 500px;
     margin: 0 auto;
     padding: 20px;
@@ -7,21 +6,20 @@
     background-color: #263238;
     color: white;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
     font-weight: bold;
 }
 
-.update-profile-title {
-    text-align: center;
-    font-size: 24px;
-    color: #FFD700;
+.container-guild-update h1 {
     margin-bottom: 20px;
+    text-align: center;
+    color: gold;
 }
 
-.update-profile-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+
 
 .form-group {
     margin-bottom: 20px;
@@ -35,6 +33,7 @@
 
 .form-group input,
 .form-group textarea {
+    text-align: center;
     width: 100%;
     padding: 10px;
     border-radius: 4px;
@@ -47,7 +46,9 @@
     height: 100px;
 }
 
-.btn-primary {
+
+.container-guild-update button {
+    margin-top: 10px;
     padding: 10px 20px;
     background-color: #262;
     color: white;
@@ -56,7 +57,8 @@
     cursor: pointer;
 }
 
-.btn-primary:hover {
+.container-guild-update button:hover {
     background-color: #4caf50;
     color: gold;
 }
+
