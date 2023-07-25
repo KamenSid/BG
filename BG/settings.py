@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     # Project apps
     'BG.testdb',
     'embed_video',
-    'BG.accounts',
+    'BG.accounts.apps.AccountsConfig',
     'BG.members'
 ]
 
@@ -122,3 +122,10 @@ AUTH_USER_MODEL = 'accounts.AppUser'
 
 MEDIA_ROOT = 'media/'
 MEDIA_URL = '/media/'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}

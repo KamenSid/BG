@@ -27,8 +27,8 @@ class RegisterUserView(CreateView):
         password = form.cleaned_data['password1']
         user = authenticate(username=email, password=password)
         login(self.request, user)
-
-        profile = AppUserProfile(app_user=user)  # Creating Profile for the User
-        profile.save()
+        #
+        # profile = AppUserProfile(app_user=user)  # Creating Profile for the User
+        # profile.save()
         messages.success(self.request, 'Registration success!')
         return response

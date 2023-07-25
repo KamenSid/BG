@@ -55,6 +55,9 @@ class SearchForm(forms.Form):
                              required=False)
     guild = forms.ModelChoiceField(queryset=Guild.objects.all(), required=False, empty_label="Select a Guild")
 
+    search_members = forms.BooleanField(required=False, initial=False,
+                                        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['game'].choices = self.get_choices(Replay, field="game")

@@ -10,10 +10,12 @@
                 <label for="{{ form.name.id_for_label }}">Name:</label>
                 {{ form.name }}
             </div>
-            <div class="form-group">
-                <label for="{{ form.leader.id_for_label }}">Leader:</label>
-                {{ form.leader }}
-            </div>
+            {% if user.is_superuser %}
+                <div class="form-group">
+                    <label for="{{ form.leader.id_for_label }}">Leader:</label>
+                    {{ form.leader }}
+                </div>
+            {% endif %}
             <div class="form-group">
                 <label for="{{ form.banner.id_for_label }}">Banner:</label>
                 {{ form.banner }}

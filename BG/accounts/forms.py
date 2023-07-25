@@ -9,3 +9,6 @@ class AppUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = ['email', 'password1', 'password2']
+
+
+

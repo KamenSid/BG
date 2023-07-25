@@ -8,7 +8,7 @@
     <div class="replay-details">
         <h2 class="replay-title">{{ replay.title }}</h2>
         <div class="replay-info">
-            <p class="replay-author">Uploaded by: {{ replay.author.appuserprofile.username }}</p>
+            <p class="replay-author">Uploaded by:<a href="{% url 'profile-details' pk=replay.author.pk %}"> {{ replay.author.appuserprofile.username }}</a></p>
             <p class="replay-game">Game: {{ replay.game }}</p>
         </div>
         <div class="replay-video">
@@ -18,9 +18,9 @@
             <p>{{ replay.description }}</p>
         </div>
         <div class="replay-likes">
-            <p class="replay-likes-count">Likes: {{ replay.likes.count }}</p>
-            {% for like in replay.likes.all %}
-                <p class="card-text">{{ like.appuserprofile.username }}</p>
+            <p class="replay-likes-count">Likes: {{ replay.like_set.count }}</p>
+            {% for like in replay.like_set.all %}
+                <p class="card-text">{{ like.user.appuserprofile.username }}</p>
             {% endfor %}
         </div>
         <div>
@@ -33,20 +33,22 @@
                         <button class="replay-delete-button">Delete</button>
                     </a>
                 {% endif %}
+
+                </div>
+                <div class="comment-section">
+                    <div class="comment-form">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
+                            <button type="submit">Comment</button>
+                        </form>
+                    </div>
+                </div>
             {% else %}
-                <p>Please login to like this replay.</p>
+                <p>Please login to like and comment this replay.</p>
             {% endif %}
-        </div>
         <div class="comment-section">
-            <div class="comment-form">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit">Comment</button>
-                </form>
-            </div>
-        </div>
-        <div class="comment-section">
+            <h2>Comments:</h2>
             <ul>
                 {% for comment in replay.comment_set.all %}
                     <li>

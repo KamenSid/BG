@@ -49,10 +49,17 @@
                             <li class="nav-item">
                                 <a class="nav-link" href={% url "log-out-user" %}>LogOut</a>
                             </li>
+                            {% if user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href={% url "guild-create" %}>CreateGuild</a>
+                                </li>
+                            {% endif %}
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin">Admin</a>
-                        </li>
+                        {% if user.is_staff or user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin">Admin</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
