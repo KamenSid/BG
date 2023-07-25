@@ -27,13 +27,11 @@ The application also integrates with Steam API, allowing users to link their Ste
 
 ## Usage
 
-1. Access the application through your web browser at `TBD`.
+1. Register for a new account or log in with your existing credentials.
 
-2. Register for a new account or log in with your existing credentials.
+2. Explore the replays, join guilds, and interact with other users by commenting and liking their replays.
 
-3. Explore the replays, join guilds, and interact with other users by commenting and liking their replays.
-
-4. You can also link your Steam account to display your gaming stats and recent games.
+3. You can also link your Steam account to display your gaming stats and recent games.
 
 ## Technologies Used
 
