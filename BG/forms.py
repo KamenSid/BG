@@ -15,13 +15,13 @@ class CreateReplay(forms.ModelForm):
                                   widget=forms.TextInput(attrs={'placeholder': 'Description'}))
     video_url = forms.CharField(label="", max_length=MAX_LENGTH_LARGE,
                                 required=False, widget=forms.TextInput(attrs={'placeholder': 'Video URL'}))
-    video_upload = forms.FileField(label="", required=False,
-                                   widget=forms.TextInput(
-                                       attrs={'placeholder': 'Upload video file', 'disabled': 'disabled'}))
+    video_upload = forms.FileField(
+        label="", required=False, widget=forms.ClearableFileInput()
+    )
 
     class Meta:
         model = Replay
-        fields = ("title", "game", "description", "video_url")
+        fields = ("title", "game", "description", "video_url", "video_upload")
 
 
 class DeleteReplayForm(forms.ModelForm):
