@@ -14,6 +14,10 @@
                         <li>{{ member.appuserprofile.username }}</li>
                     {% endfor %}
                 </ul>
+                <h3>Leader:</h3>
+                <ul class="guild-members-list">
+                    <li>{{ object.leader.appuserprofile.username }}</li>
+                </ul>
 
             </div>
             <br>
@@ -29,7 +33,7 @@
                 </ul>
                 <p>Total Guild Likes: {{ total_guild_likes }}</p>
             </div>
-            {% if object.leader_id == user.id %}
+            {% if user_is_leader %}
                 <div class="edit-guild-link">
                     <a href="{% url 'guild-edit' %}">Edit Guild</a>
                 </div>

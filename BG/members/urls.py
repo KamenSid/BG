@@ -14,6 +14,7 @@ urlpatterns = [
     path("guild/", include([
         path("details/", views.GuildDetailsView.as_view(), name="guild-details"),
         path("create/", views.GuildCreate.as_view(), name="guild-create"),
-        path("edit/", views.EditGuildView.as_view(), name="guild-edit")])
+        path("edit/", views.EditGuildView.as_view(), name="guild-edit"),
+        path("add_members/", views.guild_add_members, name="guild-add-members")]),
          )
 ]

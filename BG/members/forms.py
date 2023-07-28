@@ -13,3 +13,7 @@ class GuildForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['leader'].queryset = User.objects.filter(appuserprofile__guild=None)
+
+
+class GuildInviteForm(forms.Form):
+    invite_user = forms.CharField(label="Invite User", max_length=100)

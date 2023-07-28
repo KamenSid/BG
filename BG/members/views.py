@@ -5,11 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm, EditGuildForm
-from BG.members.forms import GuildForm
+from BG.members.forms import GuildForm, GuildInviteForm
 from steam import Steam
 
 AppUser = get_user_model()
@@ -21,17 +21,6 @@ with open("steam_api.txt", "r") as file:
 def get_profile(user):
     profile = get_object_or_404(AppUserProfile, app_user_id=user.id)
     return profile
-
-
-class UploadReplayView(LoginRequiredMixin, CreateView):
-    model = Replay
-    form_class = CreateReplay
-    template_name = 'members/upload_replay.html'
-    success_url = '/'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
 
 
 @login_required
@@ -58,6 +47,17 @@ def like_replay(request, replay_pk):
     else:
         Like.objects.create(user=user, replay=replay)
     return redirect('replay-details', pk=replay_pk)
+
+
+class UploadReplayView(LoginRequiredMixin, CreateView):
+    model = Replay
+    form_class = CreateReplay
+    template_name = 'members/upload_replay.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
@@ -113,6 +113,10 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
             context['replays_by_members'] = replays_by_guild_members
             context['total_guild_likes'] = total_guild_likes
             context['members'] = members
+
+            user_is_leader = self.object.leader == self.request.user
+            context['user_is_leader'] = user_is_leader
+
         return context
 
 
@@ -125,6 +129,12 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         guild_obj = self.request.user.guild.first()
         return guild_obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["messages"] = []
+
+        return context
 
 
 class GuildCreate(LoginRequiredMixin, CreateView):
@@ -143,6 +153,32 @@ class GuildCreate(LoginRequiredMixin, CreateView):
         self.object.members.add(chosen_leader)
 
         return response
+
+
+def guild_add_members(request):
+    guild_obj = request.user.guild.first()
+    context = {}
+    if request.method == 'POST':
+        invite_form = GuildInviteForm(request.POST)
+        if invite_form.is_valid():
+            invited_username = invite_form.cleaned_data.get('invite_user')
+            invited_user = AppUser.objects.filter(appuserprofile__username=invited_username).first()
+            if invited_user:
+                guild_obj.members.add(invited_user)
+                context = {
+                    "messages": f"You have added {invited_user.appuserprofile.username}"
+                }
+            else:
+                context = {
+                    "messages": "There is no such user!"
+                }
+
+            return redirect('guild-edit')
+    else:
+        invite_form = GuildInviteForm()
+
+    context["invite_form"] = invite_form
+    return render(request, template_name="members/guild_add_members.html", context=context)
 
 
 class ProfileView(LoginRequiredMixin, DetailView):

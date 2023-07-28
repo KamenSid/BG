@@ -1,0 +1,12 @@
+{% extends "testdb/index.html" %}
+{% block title %} <h1>You are about to add members to </h1>
+{% endblock %}
+{% block content %}
+    <div style="margin: 10px">
+    <form method="post">
+        {% csrf_token %}
+        {{ invite_form.as_div }}
+        <button type="submit" style="margin: 10px">Invite User</button>
+    </form>
+    </div>
+{% endblock %}
