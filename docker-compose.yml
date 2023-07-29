@@ -1,14 +1,14 @@
 version: '3'
 services:
   app:
-    build: ./BG
-    command: python manage.py runserver 0.0.0.0:8000
+    build: ./
+    command: gunicorn --bind=0.0.0.0:8000 BG.wsgi:application
     volumes:
-      - ./BG/:/usr/src/app/
+      - ./BG/static:/app/BG/static
     ports:
       - "8000:8000"
     env_file:
-      - ./envs/.env
+      - envs/.env.deploy
     depends_on:
       - db
 
@@ -24,3 +24,17 @@ services:
       - PGDATA:/var/lib/postgresql/data/pgdata
     volumes:
       - ./postgresql:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - E:/Coding/Django/BG/BG/static:app/BG/static
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    links:
+      - app

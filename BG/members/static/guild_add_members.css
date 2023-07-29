@@ -1,31 +1,16 @@
-.container-guild-update {
+
+.form-group {
     max-width: 500px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 5px;
     background-color: #263238;
-    color: white;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
     font-weight: bold;
-}
-
-.container-guild-update:link {
-    text-decoration: none;
-}
-
-.container-guild-update h1 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: gold;
-}
-
-
-.form-group {
-    margin-bottom: 20px;
 }
 
 .form-group label {
@@ -45,12 +30,11 @@
     color: #333;
 }
 
-.form-group textarea {
-    height: 100px;
+.form-group h1{
+    color: gold;
 }
 
-
-.container-guild-update button {
+.form-group button {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #262;
@@ -60,21 +44,7 @@
     cursor: pointer;
 }
 
-.container-guild-update button:hover {
-    background-color: #4caf50;
-    color: gold;
-}
-
-.add-members-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    background: #262;
-    border-radius: 5px;
-    color: #FFFFFF;
-}
-
-.add-members-btn:hover {
+.form-group button:hover {
     background-color: #4caf50;
     color: gold;
 }

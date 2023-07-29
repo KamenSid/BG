@@ -9,6 +9,8 @@ DEBUG = os.environ.get('DEBUG') == "True"
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 
+CSRF_TRUSTED_ORIGINS = [f'http://{x}:81' for x in os.environ.get('ALLOWED_HOSTS', '').split(' ')]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -108,9 +110,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR, 'BG/testdb/static/',
-    BASE_DIR, 'BG/members/static/',
+    os.path.join(BASE_DIR, 'BG/testdb/static/'),
+    os.path.join(BASE_DIR, 'BG/members/static/'),
+    os.path.join(BASE_DIR, 'BG/accounts/static/'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'BG/static/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

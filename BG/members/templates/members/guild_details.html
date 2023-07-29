@@ -11,12 +11,15 @@
                 <h3>Members:</h3>
                 <ul class="guild-members-list">
                     {% for member in members %}
-                        <li>{{ member.appuserprofile.username }}</li>
+                        <li><a href="{% url 'profile-details' member.pk %}">{{ member.appuserprofile.username }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
                 <h3>Leader:</h3>
                 <ul class="guild-members-list">
-                    <li>{{ object.leader.appuserprofile.username }}</li>
+                    <li>
+                        <a href="{% url 'profile-details' object.leader.pk %}">{{ object.leader.appuserprofile.username }}</a>
+                    </li>
                 </ul>
 
             </div>

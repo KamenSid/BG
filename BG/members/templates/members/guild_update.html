@@ -22,8 +22,9 @@
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Update Guild</button>
         </form>
+        <div class="add-members-btn">
+            <a href="{% url 'guild-add-members' %} ">Add Members</a>
+        </div>
     </div>
-    <div class="add-members-button">
-    <a href="{% url 'guild-add-members' %}" >Add Members</a>
-    </div>
+
 {% endblock %}

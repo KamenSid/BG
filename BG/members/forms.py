@@ -16,4 +16,5 @@ class GuildForm(forms.ModelForm):
 
 
 class GuildInviteForm(forms.Form):
-    invite_user = forms.CharField(label="Invite User", max_length=100)
+    invite_user = forms.CharField(label="", max_length=100,
+                                  widget=forms.TextInput(attrs={"placeholder": "User to add or remove"}))

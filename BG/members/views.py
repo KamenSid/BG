@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -49,6 +50,40 @@ def like_replay(request, replay_pk):
     return redirect('replay-details', pk=replay_pk)
 
 
+@login_required
+def guild_add_members(request):
+    guild_obj = request.user.appuserprofile.guild
+    context = {
+        "guild_name": guild_obj.name
+    }
+    if request.method == 'POST':
+        invite_form = GuildInviteForm(request.POST)
+        if invite_form.is_valid():
+            invited_username = invite_form.cleaned_data.get('invite_user')
+            try:
+                invited_user = AppUser.objects.filter(appuserprofile__username=invited_username).first()
+
+                if invited_user in guild_obj.members.all():
+                    guild_obj.members.remove(invited_user)
+                    invited_user.appuserprofile.guild = None
+                    invited_user.appuserprofile.save()
+                    context["messages"] = [f"You have removed {invited_username}"]
+                else:
+                    guild_obj.members.add(invited_user)
+                    invited_user.appuserprofile.guild = guild_obj
+                    invited_user.appuserprofile.save()
+                    context["messages"] = [f"You have added {invited_username} to {guild_obj.name}"]
+            except IntegrityError:
+                context["messages"] = [f"There is no user called {invited_username}"]
+                context["invite_form"] = GuildInviteForm()
+
+    else:
+        invite_form = GuildInviteForm()
+
+    context["invite_form"] = invite_form
+    return render(request, template_name="members/guild_add_members.html", context=context)
+
+
 class UploadReplayView(LoginRequiredMixin, CreateView):
     model = Replay
     form_class = CreateReplay
@@ -58,6 +93,48 @@ class UploadReplayView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = AppUser
+    template_name = 'members/profile_view.html'
+    context_object_name = 'appuser'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        own_profile = False
+        steam = Steam(STEAM_KEY)
+        player_info = ""
+        profile_user = self.get_object()
+        uploaded_replays = Replay.objects.filter(author=profile_user.pk)
+        liked_replays = Replay.objects.filter(like__user=profile_user.pk)
+        replays_count = uploaded_replays.count()
+
+        if self.request.user == profile_user:  # Checking if the logged user is the owner of the profile
+            own_profile = True
+
+        if profile_user.appuserprofile.steam_id:
+            user_steam_id = profile_user.appuserprofile.steam_id
+
+            try:
+                player_info = steam.users.get_user_details(user_steam_id)['player']
+                player_recent_games = steam.users.get_user_recently_played_games(user_steam_id)['games']
+                cache.set(f'player_info_{user_steam_id}', player_info, 36000)
+                cache.set(f'player_recent_games_{user_steam_id}', player_recent_games, 36000)
+                context['player_info'] = player_info
+                context['player_avatar'] = player_info['avatarfull']
+                context['player_recent_games'] = player_recent_games
+            except Exception as ve:
+                context["messages"] = [f"There is an error {ve}"]
+        else:
+            context["messages"] = [f"{profile_user.appuserprofile.username} didnt add a Steam ID."]
+
+        context['test_replays'] = uploaded_replays
+        context['replays_count'] = replays_count
+        context['liked_replays'] = liked_replays
+        context['owner'] = own_profile
+
+        return context
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
@@ -146,6 +223,8 @@ class GuildCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         chosen_leader = form.cleaned_data['leader']
+        chosen_leader.appuserprofile.guild = self.object
+        chosen_leader.is_staff = True
         leader_profile = chosen_leader.appuserprofile
         leader_profile.guild = self.object
         leader_profile.save()
@@ -153,75 +232,3 @@ class GuildCreate(LoginRequiredMixin, CreateView):
         self.object.members.add(chosen_leader)
 
         return response
-
-
-def guild_add_members(request):
-    guild_obj = request.user.guild.first()
-    context = {}
-    if request.method == 'POST':
-        invite_form = GuildInviteForm(request.POST)
-        if invite_form.is_valid():
-            invited_username = invite_form.cleaned_data.get('invite_user')
-            invited_user = AppUser.objects.filter(appuserprofile__username=invited_username).first()
-            if invited_user:
-                guild_obj.members.add(invited_user)
-                context = {
-                    "messages": f"You have added {invited_user.appuserprofile.username}"
-                }
-            else:
-                context = {
-                    "messages": "There is no such user!"
-                }
-
-            return redirect('guild-edit')
-    else:
-        invite_form = GuildInviteForm()
-
-    context["invite_form"] = invite_form
-    return render(request, template_name="members/guild_add_members.html", context=context)
-
-
-class ProfileView(LoginRequiredMixin, DetailView):
-    model = AppUser
-    template_name = 'members/profile_view.html'
-    context_object_name = 'appuser'
-
-    def get_context_data(self, **kwargs):
-
-        own_profile = False
-        steam = Steam(STEAM_KEY)
-        player_info = ""
-        profile_user = self.get_object()
-        if self.request.user == profile_user:
-            own_profile = True
-
-        if profile_user.appuserprofile.steam_id:
-            user_steam_id = profile_user.appuserprofile.steam_id
-            cached_player_info = cache.get(f'player_info_{user_steam_id}')
-            cached_player_recent_games = cache.get(f'player_recent_games_{user_steam_id}')
-
-            if not cached_player_info or not cached_player_recent_games:
-                player_info = steam.users.get_user_details(user_steam_id)['player']
-                player_recent_games = steam.users.get_user_recently_played_games(user_steam_id)['games']
-                cache.set(f'player_info_{user_steam_id}', player_info, 36000)
-                cache.set(f'player_recent_games_{user_steam_id}', player_recent_games, 36000)
-            else:
-                player_info = cached_player_info
-                player_recent_games = cached_player_recent_games
-
-        uploaded_replays = Replay.objects.filter(author=profile_user.pk)
-        liked_replays = Replay.objects.filter(like__user=profile_user.pk)
-        replays_count = uploaded_replays.count()
-
-        context = super().get_context_data(**kwargs)
-        context['test_replays'] = uploaded_replays
-        context['replays_count'] = replays_count
-        context['liked_replays'] = liked_replays
-        context['owner'] = own_profile
-
-        if player_info:
-            context['player_info'] = player_info
-            context['player_avatar'] = player_info['avatarfull']
-            context['player_recent_games'] = player_recent_games
-
-        return context
