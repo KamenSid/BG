@@ -175,10 +175,6 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
     model = Guild
     template_name = 'members/guild_details.html'
 
-    def get_object(self, queryset=None):
-        guild = self.request.user.appuserprofile.guild
-        return guild
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
@@ -187,11 +183,10 @@ class GuildDetailsView(LoginRequiredMixin, DetailView):
             total_guild_likes = 0
             for replay in replays_by_guild_members:
                 total_guild_likes += replay.like_set.count()
+            user_is_leader = self.object.leader == self.request.user
             context['replays_by_members'] = replays_by_guild_members
             context['total_guild_likes'] = total_guild_likes
             context['members'] = members
-
-            user_is_leader = self.object.leader == self.request.user
             context['user_is_leader'] = user_is_leader
 
         return context
@@ -223,8 +218,9 @@ class GuildCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         chosen_leader = form.cleaned_data['leader']
-        chosen_leader.appuserprofile.guild = self.object
+
         chosen_leader.is_staff = True
+        chosen_leader.save()
         leader_profile = chosen_leader.appuserprofile
         leader_profile.guild = self.object
         leader_profile.save()

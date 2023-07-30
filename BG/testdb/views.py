@@ -29,6 +29,17 @@ class ReplayDetailsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+                                                                                # History setup
+        MAX_HISTORY = 10
+        history = self.request.session.get('history', [])
+        replay_info = {'title': self.object.title,
+                       'pk': self.object.pk
+                       }
+        if replay_info in history:
+            history.remove(replay_info)
+        history.insert(0, replay_info)
+        self.request.session['history'] = history[:MAX_HISTORY]
+
         context['comment_form'] = CommentInputForm()
         return context
 
@@ -63,7 +74,6 @@ class SearchView(FormView):
             search_results = search_results.filter(game=game)
 
         if guild:
-
             search_results = search_results.filter(author__appuserprofile__guild_id=guild)
         return search_results
 

@@ -113,9 +113,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'BG/testdb/static/'),
     os.path.join(BASE_DIR, 'BG/members/static/'),
     os.path.join(BASE_DIR, 'BG/accounts/static/'),
+    os.path.join(BASE_DIR, 'BG/static/'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'BG/static/')
+STATIC_ROOT = os.environ.get('STATIC_ROOT', BASE_DIR / 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

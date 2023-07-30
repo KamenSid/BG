@@ -8,7 +8,7 @@ AppUser = get_user_model()
 class Guild(models.Model):
     GUILD_NAME_MAX_LENGTH = 100
 
-    name = models.CharField(max_length=GUILD_NAME_MAX_LENGTH, null=False, blank=False)
+    name = models.CharField(max_length=GUILD_NAME_MAX_LENGTH, null=False, blank=False, unique=True)
     leader = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name='leader')
     members = models.ManyToManyField(AppUser, related_name='guild')
     banner = models.URLField(null=True, blank=True)
@@ -35,6 +35,7 @@ class AppUserProfile(models.Model):
 
     def __str__(self):
         return f"User: {self.username} | Guild: {self.guild}"
+
 
 class Like(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.DO_NOTHING)

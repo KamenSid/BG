@@ -8,7 +8,16 @@
     <div class="replay-details">
         <h2 class="replay-title">{{ replay.title }}</h2>
         <div class="replay-info">
-            <p class="replay-author">Uploaded by:<a href="{% url 'profile-details' pk=replay.author.pk %}"> {{ replay.author.appuserprofile.username }}</a></p>
+
+            <p class="replay-author">Uploaded by:
+                {% if replay.author.appuserprofile.guild %}
+                    [<a href="{% url 'guild-details' replay.author.appuserprofile.guild.pk %}"> {{ replay.author.appuserprofile.guild }} </a>]
+                    <a href="{% url 'profile-details' pk=replay.author.pk %}">
+                        {{ replay.author.appuserprofile.username }}</a></p>
+                {% else %}
+                    <a href="{% url 'profile-details' pk=replay.author.pk %}">
+                        {{ replay.author.appuserprofile.username }}</a></p>
+                {% endif %}
             <p class="replay-game">Game: {{ replay.game }}</p>
         </div>
         <div class="replay-video">

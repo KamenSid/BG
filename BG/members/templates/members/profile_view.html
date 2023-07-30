@@ -6,7 +6,7 @@
     <link href="{% static 'profile.css' %}" rel="stylesheet">
 
     <div class="profile-details">
-        <h1 class="profile-name">{{ appuser.username }}</h1>
+        <h1 class="profile-name">{{ appuser.appuserprofile.username }}</h1>
         <div class="profile-info">
             <p class="replays-posted">Replays posted: {{ replays_count }}</p>
             <p class="last-log-in">Last Login: {{ appuser.last_login }}</p>
