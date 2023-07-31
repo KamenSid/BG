@@ -40,7 +40,7 @@ The application also integrates with Steam API, allowing users to link their Ste
 - CSS
 - JavaScript
 - Bootstrap
-- SQLite
+- PostgreSQL
 
 ## License
 
