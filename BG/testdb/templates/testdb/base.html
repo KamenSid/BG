@@ -41,10 +41,12 @@
                                 <a class="nav-link" href={% url "upload-replay" %}>Add Replay</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href={% url "guild-details" request.user.pk %}>Guild</a>
+                                <a class="nav-link" href={% url "guild-details" request.user.appuserprofile.guild.pk %}>
+                                    Guild</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href={% url "profile-details" request.user.pk %}>My Profile</a>
+                                <a class="nav-link"
+                                   href={% url "profile-details" request.user.pk %}>My Profile</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href={% url "log-out-user" %}>LogOut</a>
@@ -85,10 +87,10 @@
 {% endblock %}
 {% block footer %}
     <h3>Recently watched replays:</h3>
-    <ul >
-    {% for replay_info in request.session.history %}
-        <li><a href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a></li>
-    {% endfor %}
+    <ul>
+        {% for replay_info in request.session.history %}
+            <li><a href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a></li>
+        {% endfor %}
     </ul>
 {% endblock %}
 </body>

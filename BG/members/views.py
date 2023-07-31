@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from rest_framework import generics
+from .serializers import ReplaySerializer
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm, EditGuildForm
@@ -104,7 +106,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         own_profile = False
         steam = Steam(STEAM_KEY)
-        player_info = ""
+
         profile_user = self.get_object()
         uploaded_replays = Replay.objects.filter(author=profile_user.pk)
         liked_replays = Replay.objects.filter(like__user=profile_user.pk)
@@ -228,3 +230,20 @@ class GuildCreate(LoginRequiredMixin, CreateView):
         self.object.members.add(chosen_leader)
 
         return response
+
+
+# REST API Views
+
+
+class ReplayListAPIView(generics.ListAPIView):
+    queryset = Replay.objects.all()
+    serializer_class = ReplaySerializer
+
+
+def replay_list_frontend_view(request):
+    return render(request, 'testdb/API_list.html')
+
+
+class ReplayDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Replay.objects.all()
+    serializer_class = ReplaySerializer

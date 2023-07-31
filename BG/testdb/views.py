@@ -1,11 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, DeleteView, ListView, FormView
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-
 from .models import Replay
 from BG.forms import DeleteReplayForm, CommentInputForm, SearchForm
-from ..members.models import Guild
 
 
 class IndexView(ListView):
@@ -29,7 +27,7 @@ class ReplayDetailsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-                                                                                # History setup
+        # History setup
         MAX_HISTORY = 10
         history = self.request.session.get('history', [])
         replay_info = {'title': self.object.title,
