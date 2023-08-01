@@ -1,10 +1,17 @@
 {% extends 'testdb/base.html' %}
-
+{% load static %}
 {% block content %}
-    <h2>Create Guild</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create</button>
-    </form>
+    <link href="{% static 'guild_create.css' %}" rel="stylesheet">
+    <div class="container-guild-create">
+        <h1 class="mb-4">You are about to create a guild</h1>
+        <form action="{% url 'guild-create' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <button type="submit" name="submit" class="btn btn-primary">Create</button>
+        </form>
+        {% if message %}
+            <h2 class="mt-4">{{ message }}</h2>
+        {% endif %}
+    </div>
+
 {% endblock %}

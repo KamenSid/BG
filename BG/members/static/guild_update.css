@@ -37,7 +37,6 @@
 .form-group input,
 .form-group textarea {
     text-align: center;
-    width: 100%;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -65,16 +64,5 @@
     color: gold;
 }
 
-.add-members-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    background: #262;
-    border-radius: 5px;
-    color: #FFFFFF;
-}
 
-.add-members-btn:hover {
-    background-color: #4caf50;
-    color: gold;
-}
+

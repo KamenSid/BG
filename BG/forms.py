@@ -82,17 +82,3 @@ class AppUserProfileForm(forms.ModelForm):
             self.fields['steam_id'].initial = instance.steam_id
 
 
-class EditGuildForm(forms.ModelForm):
-    MAX_LENGTH = 50
-    MAX_LENGTH_URL = 300
-
-    name = forms.CharField(label="", max_length=MAX_LENGTH,
-                           widget=forms.TextInput(attrs={'placeholder': 'Guild Name'}))
-    leader = forms.CharField(label="", max_length=MAX_LENGTH,
-                             widget=forms.TextInput(attrs={'placeholder': 'Guild Leader'}))
-    banner = forms.URLField(label="", max_length=MAX_LENGTH_URL,
-                            required=False, widget=forms.TextInput(attrs={'placeholder': 'Guild Banner'}))
-
-    class Meta:
-        model = Guild
-        fields = ('name', 'leader', 'banner')

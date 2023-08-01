@@ -1,7 +1,8 @@
+{% extends 'testdb/base.html' %}
 {% load static %}
 
 
-
+{% block content %}
     <title>Replays List</title>
 
 <body>
@@ -13,3 +14,4 @@
 
     <script src="{% static 'replay_list_script.js' %}"></script>
 </body>
+{% endblock %}

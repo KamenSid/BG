@@ -3,28 +3,21 @@
 {% block content %}
     <link href="{% static 'guild_update.css' %}" rel="stylesheet">
     <div class="container-guild-update">
-        <h1 class="mb-4">You are about to Update {{ object.name }} </h1>
+        <h1 class="mb-4">{{ object.name }}</h1>
         <form action="{% url 'guild-edit' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <label for="{{ form.name.id_for_label }}">Name:</label>
                 {{ form.name }}
             </div>
-            {% if user.is_superuser %}
-                <div class="form-group">
-                    <label for="{{ form.leader.id_for_label }}">Leader:</label>
-                    {{ form.leader }}
-                </div>
-            {% endif %}
             <div class="form-group">
-                <label for="{{ form.banner.id_for_label }}">Banner:</label>
+                <label for="{{ form.leader.id_for_label }}">Leader:</label>
+                {{ form.leader }}
+            </div>
+            <div class="form-group">
                 {{ form.banner }}
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Update Guild</button>
         </form>
-        <div class="add-members-btn">
-            <a href="{% url 'guild-add-members' %} ">Add Members</a>
-        </div>
+        <button class="btn btn-primary"><a href="{% url 'guild-add-members' %} ">Add Members</a></button>
     </div>
-
 {% endblock %}

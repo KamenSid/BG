@@ -8,11 +8,12 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from rest_framework import generics
+from rest_framework.permissions import DjangoModelPermissions
 from .serializers import ReplaySerializer
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild, Like
-from BG.forms import CreateReplay, AppUserProfileForm, EditGuildForm
-from BG.members.forms import GuildForm, GuildInviteForm
+from BG.forms import CreateReplay, AppUserProfileForm
+from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm
 from steam import Steam
 
 AppUser = get_user_model()
@@ -198,17 +199,33 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
     model = Guild
     template_name = 'members/guild_update.html'
     form_class = EditGuildForm
-    success_url = reverse_lazy('guild-details')
 
     def get_object(self, queryset=None):
         guild_obj = self.request.user.guild.first()
         return guild_obj
 
+    def form_valid(self, form):
+        guild = self.get_object()
+
+        old_leader = guild.leader
+        new_leader = form.cleaned_data['leader']
+        if new_leader != old_leader:
+            old_leader.is_staff = False
+            old_leader.save()
+            new_leader.is_staff = True
+            new_leader.save()
+
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["messages"] = []
-
         return context
+
+    def get_success_url(self):
+        guild_pk = self.object.pk
+        success_url = reverse_lazy('guild-details', kwargs={'pk': guild_pk})
+        return success_url
 
 
 class GuildCreate(LoginRequiredMixin, CreateView):
@@ -235,7 +252,7 @@ class GuildCreate(LoginRequiredMixin, CreateView):
 # REST API Views
 
 
-class ReplayListAPIView(generics.ListAPIView):
+class ReplayListAPIView(generics.ListAPIView, LoginRequiredMixin):
     queryset = Replay.objects.all()
     serializer_class = ReplaySerializer
 
@@ -244,6 +261,6 @@ def replay_list_frontend_view(request):
     return render(request, 'testdb/API_list.html')
 
 
-class ReplayDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class ReplayDetailAPIView(generics.RetrieveUpdateDestroyAPIView, LoginRequiredMixin, DjangoModelPermissions):
     queryset = Replay.objects.all()
     serializer_class = ReplaySerializer

@@ -1,0 +1,60 @@
+.container-guild-create {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #263238;
+    color: white;
+    text-align: center;
+
+}
+
+.container-guild-create {
+    margin-bottom: 20px;
+    text-align: center;
+    color: gold;
+}
+
+.container-guild-create form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+.container-guild-create label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.container-guild-create input[type="text"],
+.container-guild-create input[type="file"] {
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.container-guild-create button {
+    padding: 10px 20px;
+    background-color: #262;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.container-guild-create button:hover {
+    background-color: #4caf50;
+    color: gold;
+}
+
+.container-guild-create h2 {
+    margin-top: 20px;
+    text-align: center;
+
+}

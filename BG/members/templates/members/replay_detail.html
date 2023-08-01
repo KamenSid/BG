@@ -37,7 +37,7 @@
                 <a href="{% url 'like-replay' replay.pk %}">
                     <button class="replay-likes-button">Like</button>
                 </a>
-                {% if user.is_superuser %}
+                {% if user == replay.author %}
                     <a href="{% url 'replay-delete' replay.pk %}">
                         <button class="replay-delete-button">Delete</button>
                     </a>
