@@ -1,3 +1,4 @@
+import asyncio
 from django.db import IntegrityError
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
@@ -15,7 +16,6 @@ from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm
 from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm
 from steam import Steam
-import asyncio
 
 AppUser = get_user_model()
 
@@ -73,10 +73,13 @@ def guild_add_members(request):
                     invited_user.appuserprofile.save()
                     context["messages"] = [f"You have removed {invited_username}"]
                 else:
-                    guild_obj.members.add(invited_user)
-                    invited_user.appuserprofile.guild = guild_obj
-                    invited_user.appuserprofile.save()
-                    context["messages"] = [f"You have added {invited_username} to {guild_obj.name}"]
+                    if invited_user.appuserprofile.guild is None:
+                        guild_obj.members.add(invited_user)
+                        invited_user.appuserprofile.guild = guild_obj
+                        invited_user.appuserprofile.save()
+                        context["messages"] = [f"You have added {invited_username} to {guild_obj.name}"]
+                    else:
+                        context["messages"] = [f"The user: {invited_username} is already member of a guild."]
             except IntegrityError:
                 context["messages"] = [f"There is no user called {invited_username}"]
                 context["invite_form"] = GuildInviteForm()
@@ -106,26 +109,27 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        own_profile = False
         steam = Steam(STEAM_KEY)
 
         profile_user = self.get_object()
         uploaded_replays = Replay.objects.filter(author=profile_user.pk)
         liked_replays = Replay.objects.filter(like__user=profile_user.pk)
         replays_count = uploaded_replays.count()
+        own_profile = self.request.user == profile_user  # Checking if the logged user is the owner of the profile
 
         async def get_steam_info(steam_id):
-            pd = steam.users.get_user_details(user_steam_id)['player']
-            pg = steam.users.get_user_recently_played_games(user_steam_id)['games']
-            return pd, pg
-
-        if self.request.user == profile_user:  # Checking if the logged user is the owner of the profile
-            own_profile = True
+            try:
+                pd = steam.users.get_user_details(steam_id)['player']
+                pg = steam.users.get_user_recently_played_games(steam_id)['games']
+                return pd, pg
+            except Exception as e:
+                context["messages"] = f"An error occurred while fetching Steam information: {e}"
 
         if profile_user.appuserprofile.steam_id:
             user_steam_id = profile_user.appuserprofile.steam_id
-            player_info, player_recent_games = asyncio.run(get_steam_info(user_steam_id))
             try:
+                player_info, player_recent_games = asyncio.run(
+                    get_steam_info(user_steam_id))  # Using asyncio to run the function
                 cache.set(f'player_info_{user_steam_id}', player_info, 36000)
                 cache.set(f'player_recent_games_{user_steam_id}', player_recent_games, 36000)
                 context['player_info'] = player_info
