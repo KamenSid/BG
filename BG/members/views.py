@@ -15,6 +15,7 @@ from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm
 from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm
 from steam import Steam
+import asyncio
 
 AppUser = get_user_model()
 
@@ -113,15 +114,18 @@ class ProfileView(LoginRequiredMixin, DetailView):
         liked_replays = Replay.objects.filter(like__user=profile_user.pk)
         replays_count = uploaded_replays.count()
 
+        async def get_steam_info(steam_id):
+            pd = steam.users.get_user_details(user_steam_id)['player']
+            pg = steam.users.get_user_recently_played_games(user_steam_id)['games']
+            return pd, pg
+
         if self.request.user == profile_user:  # Checking if the logged user is the owner of the profile
             own_profile = True
 
         if profile_user.appuserprofile.steam_id:
             user_steam_id = profile_user.appuserprofile.steam_id
-
+            player_info, player_recent_games = asyncio.run(get_steam_info(user_steam_id))
             try:
-                player_info = steam.users.get_user_details(user_steam_id)['player']
-                player_recent_games = steam.users.get_user_recently_played_games(user_steam_id)['games']
                 cache.set(f'player_info_{user_steam_id}', player_info, 36000)
                 cache.set(f'player_recent_games_{user_steam_id}', player_recent_games, 36000)
                 context['player_info'] = player_info
