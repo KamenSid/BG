@@ -8,6 +8,7 @@
 - [Technologies Used](#technologies-used)
 - [License](#license)
 - [Contact](#contact)
+- [Screenshots](#screenshots)
 
 ## Description
 
@@ -41,6 +42,28 @@ The application also integrates with Steam API, allowing users to link their Ste
 - JavaScript
 - Bootstrap
 - PostgreSQL
+
+
+## Screenshots
+
+### Home Page
+![Home Page](/screenshots/screen_1.png)
+
+### Upload replay page
+
+![Upload replay Page](/screenshots/screen_2.png)
+
+### Guild Details Page
+
+![Guild Details Page](/screenshots/screen_3.png)
+
+### Update Profile View
+
+![Update Profile View](/screenshots/screen_4.png)
+
+### API Views
+
+![API Views](/screenshots/screen_5.png)
 
 ## License
 
