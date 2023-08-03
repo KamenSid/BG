@@ -44,5 +44,18 @@ class EditGuildForm(forms.ModelForm):
 
 
 class GuildInviteForm(forms.Form):
-    invite_user = forms.CharField(label="", max_length=100,
-                                  widget=forms.TextInput(attrs={"placeholder": "User to add or remove"}))
+    invite_member = forms.CharField(label="", max_length=100,
+                                    widget=forms.TextInput(attrs={"placeholder": "User to add"}))
+
+
+class GuildRemoveForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.guild = kwargs.pop('guild', None)
+        super(GuildRemoveForm, self).__init__(*args, **kwargs)
+
+        users = User.objects.filter(appuserprofile__guild=self.guild)
+        choices = [(user.appuserprofile.username, user.appuserprofile.username) for user in users]
+        self.fields['remove_member'] = forms.ChoiceField(choices=choices)
+
+    remove_member = forms.ChoiceField(choices=[])

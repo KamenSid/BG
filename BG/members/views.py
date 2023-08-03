@@ -1,5 +1,5 @@
 import asyncio
-from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,7 @@ from .serializers import ReplaySerializer
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild, Like
 from BG.forms import CreateReplay, AppUserProfileForm
-from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm
+from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm, GuildRemoveForm
 from steam import Steam
 
 AppUser = get_user_model()
@@ -62,32 +62,38 @@ def guild_add_members(request):
     }
     if request.method == 'POST':
         invite_form = GuildInviteForm(request.POST)
-        if invite_form.is_valid():
-            invited_username = invite_form.cleaned_data.get('invite_user')
-            try:
-                invited_user = AppUser.objects.filter(appuserprofile__username=invited_username).first()
+        remove_form = GuildRemoveForm(request.POST, guild=guild_obj)
 
-                if invited_user in guild_obj.members.all():
-                    guild_obj.members.remove(invited_user)
-                    invited_user.appuserprofile.guild = None
+        if invite_form.is_valid():
+            invited_username = invite_form.cleaned_data.get('invite_member')
+            try:
+                invited_user = AppUser.objects.get(appuserprofile__username=invited_username)
+
+                if invited_user.appuserprofile.guild is None:
+                    guild_obj.members.add(invited_user)
+                    invited_user.appuserprofile.guild = guild_obj
                     invited_user.appuserprofile.save()
-                    context["messages"] = [f"You have removed {invited_username}"]
+                    context["messages"] = [f"You have added {invited_username} to {guild_obj.name}"]
                 else:
-                    if invited_user.appuserprofile.guild is None:
-                        guild_obj.members.add(invited_user)
-                        invited_user.appuserprofile.guild = guild_obj
-                        invited_user.appuserprofile.save()
-                        context["messages"] = [f"You have added {invited_username} to {guild_obj.name}"]
-                    else:
-                        context["messages"] = [f"The user: {invited_username} is already member of a guild."]
-            except IntegrityError:
-                context["messages"] = [f"There is no user called {invited_username}"]
+                    context["messages"] = [f"The user: {invited_username} is already member of a guild."]
+            except AppUser.DoesNotExist:
+                context["messages"] = [f"User with the name {invited_username} does not exist!"]
                 context["invite_form"] = GuildInviteForm()
 
+        elif remove_form.is_valid():
+            removed_user_name = remove_form.cleaned_data.get('remove_member')
+            removed_user = AppUser.objects.get(appuserprofile__username=removed_user_name)
+            if removed_user in guild_obj.members.all():
+                guild_obj.members.remove(removed_user)
+                removed_user.appuserprofile.guild = None
+                removed_user.appuserprofile.save()
+                context["messages"] = [f"You have removed {removed_user.appuserprofile.username}"]
     else:
         invite_form = GuildInviteForm()
+        remove_form = GuildRemoveForm(None, guild=guild_obj)
 
     context["invite_form"] = invite_form
+    context['remove_form'] = remove_form
     return render(request, template_name="members/guild_add_members.html", context=context)
 
 

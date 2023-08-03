@@ -4,6 +4,13 @@ from BG.testdb.models import Comment
 from BG.members.models import AppUserProfile, Guild
 
 
+def get_choices(model, field):
+    data = set(model.objects.values_list(field, flat=True).distinct())
+    choices = [('', 'All')]
+    choices.extend([[game_name, game_name] for game_name in data])
+    return choices
+
+
 class CreateReplay(forms.ModelForm):
     MAX_LENGTH_SMALL = 30
     MAX_LENGTH_LARGE = 300
@@ -60,14 +67,7 @@ class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['game'].choices = self.get_choices(Replay, field="game")
-
-    @staticmethod
-    def get_choices(model, field):
-        games = set(model.objects.values_list(field, flat=True).distinct())
-        choices = [('', 'All')]
-        choices.extend([[game_name, game_name] for game_name in games])
-        return choices
+        self.fields['game'].choices = get_choices(Replay, field="game")
 
 
 class AppUserProfileForm(forms.ModelForm):
@@ -80,5 +80,3 @@ class AppUserProfileForm(forms.ModelForm):
         instance = kwargs.get('instance')
         if instance:
             self.fields['steam_id'].initial = instance.steam_id
-
-
