@@ -56,6 +56,6 @@ class GuildRemoveForm(forms.Form):
 
         users = User.objects.filter(appuserprofile__guild=self.guild)
         choices = [(user.appuserprofile.username, user.appuserprofile.username) for user in users]
-        self.fields['remove_member'] = forms.ChoiceField(choices=choices)
+        self.fields['remove_member'] = forms.ChoiceField(label="", choices=choices)
 
-    remove_member = forms.ChoiceField(choices=[])
+

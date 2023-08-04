@@ -1,12 +1,28 @@
 {% extends 'testdb/base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Update Replay
+{% endblock %}
 {% block content %}
-
-    <h1 style="padding: 30px">You are about to update replay: {{ replay_name }}</h1>
-    <form method="post" enctype="multipart/form-data">
+    <link href="{% static 'upload_replay.css' %}" rel="stylesheet">
+    <div class="container-upload">
+        <h1 class="mb-4">You are about to update {{ replay_name }}</h1>
+        <form action="{% url 'update-replay' form.instance.pk %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" name="submit">Update</button>
-    </form>
-
-    <h2>{{ message }}</h2>
+            {{ form.title }}
+            {{ form.game }}
+            {{ form.description }}
+            {% if form.instance.video_url %}
+            {{ form.video_url }}
+            {% else %}
+            {{ form.video_upload }}
+            {% endif %}
+            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% if message %}
+            <h2 class="mt-4">{{ message }}</h2>
+        {% endif %}
+    </div>
 {% endblock %}

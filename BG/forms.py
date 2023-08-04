@@ -20,6 +20,7 @@ class CreateReplay(forms.ModelForm):
                            widget=forms.TextInput(attrs={'placeholder': 'Game'}))
     description = forms.CharField(label="", max_length=MAX_LENGTH_LARGE,
                                   widget=forms.TextInput(attrs={'placeholder': 'Description'}))
+    video_choice = forms.BooleanField(label="File Source", required=False, initial=False)
     video_url = forms.CharField(label="", max_length=MAX_LENGTH_LARGE,
                                 required=False, widget=forms.TextInput(attrs={'placeholder': 'Video URL'}))
     video_upload = forms.FileField(

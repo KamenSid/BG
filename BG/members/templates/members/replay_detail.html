@@ -11,7 +11,9 @@
 
             <p class="replay-author">Uploaded by:
                 {% if replay.author.appuserprofile.guild %}
-                    [<a href="{% url 'guild-details' replay.author.appuserprofile.guild.pk %}"> {{ replay.author.appuserprofile.guild }} </a>]
+                    [
+                    <a href="{% url 'guild-details' replay.author.appuserprofile.guild.pk %}"> {{ replay.author.appuserprofile.guild }} </a>
+                    ]
                     <a href="{% url 'profile-details' pk=replay.author.pk %}">
                         {{ replay.author.appuserprofile.username }}</a></p>
                 {% else %}
@@ -20,9 +22,15 @@
                 {% endif %}
             <p class="replay-game">Game: {{ replay.game }}</p>
         </div>
-        <div class="replay-video">
-            {% video replay.video_url "large" %}
-        </div>
+        {% if replay.video_url  %}
+            <div class="replay-video">
+                {% video replay.video_url "large" %}
+            </div>
+        {% elif replay.video_upload %}
+            <div class="replay-video">
+                <video style="scale: 50%" src="{{ replay.video_upload.url }}" controls></video>
+            </div>
+        {% endif %}
         <div class="replay-description">
             <p>{{ replay.description }}</p>
         </div>

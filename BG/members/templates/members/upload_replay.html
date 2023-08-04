@@ -3,7 +3,7 @@
 
 
 {% block title %}
-Upload Replay
+    Upload Replay
 {% endblock %}
 {% block content %}
     <link href="{% static 'upload_replay.css' %}" rel="stylesheet">
@@ -11,12 +11,36 @@ Upload Replay
         <h1 class="mb-4">You are about to upload a replay</h1>
         <form action="{% url 'upload-replay' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_div }}
-
+            {{ form.title }}
+            {{ form.game }}
+            {{ form.description }}
+            {{ form.video_url }}
+            <a href="#" id="toggle-upload" class="btn btn-secondary">Upload File Instead</a>
+            {{ form.video_upload }}
             <button type="submit" name="submit" class="btn btn-primary">Submit</button>
         </form>
         {% if message %}
             <h2 class="mt-4">{{ message }}</h2>
         {% endif %}
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleUploadButton = document.getElementById('toggle-upload');
+            const videoUrlField = document.getElementById('id_video_url');
+            const videoUploadField = document.getElementById('id_video_upload');
+
+            toggleUploadButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (videoUploadField.style.display === 'none') {
+                    videoUrlField.style.display = 'none';
+                    videoUploadField.style.display = 'block';
+                    toggleUploadButton.textContent = 'Enter Video URL Instead';
+                } else {
+                    videoUrlField.style.display = 'block';
+                    videoUploadField.style.display = 'none';
+                    toggleUploadButton.textContent = 'Upload File Instead';
+                }
+            });
+        });
+    </script>
 {% endblock %}

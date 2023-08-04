@@ -1,5 +1,4 @@
 import asyncio
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -56,7 +55,7 @@ def like_replay(request, replay_pk):
 
 @login_required
 def guild_add_members(request):
-    guild_obj = request.user.appuserprofile.guild
+    guild_obj = request.user.appuserprofile.guild  # Getting the users guild
     context = {
         "guild_name": guild_obj.name
     }
@@ -64,12 +63,12 @@ def guild_add_members(request):
         invite_form = GuildInviteForm(request.POST)
         remove_form = GuildRemoveForm(request.POST, guild=guild_obj)
 
-        if invite_form.is_valid():
+        if invite_form.is_valid():  # Inviting members to a guild
             invited_username = invite_form.cleaned_data.get('invite_member')
             try:
                 invited_user = AppUser.objects.get(appuserprofile__username=invited_username)
 
-                if invited_user.appuserprofile.guild is None:
+                if invited_user.appuserprofile.guild is None:  # Checking if the user is a member of a guild
                     guild_obj.members.add(invited_user)
                     invited_user.appuserprofile.guild = guild_obj
                     invited_user.appuserprofile.save()
@@ -80,7 +79,7 @@ def guild_add_members(request):
                 context["messages"] = [f"User with the name {invited_username} does not exist!"]
                 context["invite_form"] = GuildInviteForm()
 
-        elif remove_form.is_valid():
+        elif remove_form.is_valid():  # Removing members from the guild
             removed_user_name = remove_form.cleaned_data.get('remove_member')
             removed_user = AppUser.objects.get(appuserprofile__username=removed_user_name)
             if removed_user in guild_obj.members.all():
@@ -88,13 +87,14 @@ def guild_add_members(request):
                 removed_user.appuserprofile.guild = None
                 removed_user.appuserprofile.save()
                 context["messages"] = [f"You have removed {removed_user.appuserprofile.username}"]
+                return redirect('guild-details', pk=guild_obj.pk)
     else:
         invite_form = GuildInviteForm()
         remove_form = GuildRemoveForm(None, guild=guild_obj)
-
+        # Passing the guild to the remove form, so it can show only members to remove.
     context["invite_form"] = invite_form
     context['remove_form'] = remove_form
-    return render(request, template_name="members/guild_add_members.html", context=context)
+    return redirect('guild-details', pk=guild_obj.pk)
 
 
 class UploadReplayView(LoginRequiredMixin, CreateView):
@@ -104,7 +104,7 @@ class UploadReplayView(LoginRequiredMixin, CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user  # Setting the author as the user uploading the replay
         return super().form_valid(form)
 
 
@@ -165,7 +165,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("profile-details", kwargs={"pk": self.request.user.id})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # Saving the form with the picture file if there is one.
         form = self.form_class(request.POST, request.FILES, instance=self.get_object())
         if form.is_valid():
             form.save()
@@ -219,8 +219,8 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
         return guild_obj
 
     def form_valid(self, form):
-        guild = self.get_object()
-
+        guild = self.object
+        # Managing the staff status of the old and the new leader, since only guild leaders have staff status.
         old_leader = guild.leader
         new_leader = form.cleaned_data['leader']
         if new_leader != old_leader:

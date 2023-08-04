@@ -48,7 +48,11 @@
             <table class="replays-table">
                 {% for test_replay in test_replays %}
                     <tr class="replay-row">
+                    {% if test_replay.video_url %}
                         <td class="replay-thumbnail">{% video test_replay.video_url 'small' %}</td>
+                    {% else %}
+                        <td class="replay-thumbnail"><video src="{{ replay.video_upload.url }}" controls></video></td>
+                    {% endif %}
                         <td class="replay-details">
                             <h3 class="replay-title">{{ test_replay.title }}</h3>
                             <p class="replay-info">Game: {{ test_replay.game }}</p>

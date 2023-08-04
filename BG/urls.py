@@ -18,7 +18,6 @@ urlpatterns = [
 
     path("API/", include([
         path('replays/<int:pk>/', ReplayDetailAPIView.as_view()),
-        # path('replays/<int:pk>/front/', ReplayDetailAPIView.as_view(), name='replay-detail-API'),
         path('replays/', ReplayListAPIView.as_view(), name='replay-list-API'),
         path('replays/front/', replay_list_frontend_view, name='replay-list-API'), ])
          ),
