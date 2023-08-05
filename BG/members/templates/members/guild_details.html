@@ -7,21 +7,21 @@
         {% if guild %}
             <h2 class="guild-name">{{ object.name }}</h2>
             <div class="guild-info">
-
-                <h3>Members:</h3>
-                <ul class="guild-members-list">
-                    {% for member in members %}
-                        <li><a href="{% url 'profile-details' member.pk %}">{{ member.appuserprofile.username }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
                 <h3>Leader:</h3>
                 <ul class="guild-members-list">
                     <li>
-                        <a href="{% url 'profile-details' object.leader.pk %}">{{ object.leader.appuserprofile.username }}</a>
+                        <a class="member-link"
+                           href="{% url 'profile-details' object.leader.pk %}">{{ object.leader.appuserprofile.username }}</a>
                     </li>
                 </ul>
-
+                <h4>Members:</h4>
+                <ul class="guild-members-list">
+                    {% for member in members %}
+                        <li><a class="member-link"
+                               href="{% url 'profile-details' member.pk %}">{{ member.appuserprofile.username }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
             <br>
             <div class="replays-by-guild">

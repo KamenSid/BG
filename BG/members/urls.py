@@ -20,6 +20,6 @@ urlpatterns = [
         path("details/<int:pk>", views.GuildDetailsView.as_view(), name="guild-details"),
         path("create/", views.GuildCreate.as_view(), name="guild-create"),
         path("edit/", views.EditGuildView.as_view(), name="guild-edit"),
-        path("add_members/", views.guild_add_members, name="guild-add-members")]),
+        path("addmembers/", views.guild_add_members, name="guild-add-members")]),
          )
 ]

@@ -38,7 +38,6 @@
     list-style: none;
     padding: 0;
     margin: 10px;
-
 }
 
 .guild-members-list li,
@@ -53,10 +52,20 @@
     color: #FFFFFF;
 }
 
+.member-link {
+    text-decoration: none;
+    color: #F5F5F5;
+}
+
+.member-link:hover {
+    color: gold;
+}
+
 .replay-link:hover {
     cursor: pointer;
     color: gold;
 }
+
 .edit-guild-link {
     margin-top: 20px;
 }

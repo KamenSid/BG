@@ -94,7 +94,7 @@ def guild_add_members(request):
         # Passing the guild to the remove form, so it can show only members to remove.
     context["invite_form"] = invite_form
     context['remove_form'] = remove_form
-    return redirect('guild-details', pk=guild_obj.pk)
+    return render(request, 'members/guild_add_members.html', context)
 
 
 class UploadReplayView(LoginRequiredMixin, CreateView):
