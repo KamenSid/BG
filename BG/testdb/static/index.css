@@ -39,8 +39,14 @@ h1 {
     border: none;
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    height: 600px;
 }
+
+.card hr {
+    color: #262;
+    border-width: 2px;
+}
+
 
 .card:hover {
     transform: translateY(-5px);
@@ -49,6 +55,10 @@ h1 {
 }
 
 .card:hover .card-title {
+    color: gold;
+}
+
+.card:hover hr {
     color: gold;
 }
 
@@ -90,8 +100,6 @@ h1 {
     display: flex;
     justify-content: center;
     padding-top: 30px;
-    width: 100%;
-    height: auto;
     border-radius: 5px;
 }
 
@@ -111,7 +119,6 @@ h1 {
 }
 
 
-
 .navbar-nav .nav-link:hover {
     color: gold;
     background-color: #226622;
@@ -126,6 +133,20 @@ h1 {
     font-size: 24px;
 }
 
-.navbar-brand:hover{
+.navbar-brand:hover {
+    color: gold;
+}
+
+.recently-watched {
+    display: inline-block;
+    padding: 5px;
+}
+
+.recent-link {
+    text-decoration: none;
+    color: #262;
+}
+
+.recent-link:hover {
     color: gold;
 }

@@ -16,19 +16,21 @@
         <div class="card-container">
             {% for test_replay in test_replays %}
                 <a href="{% url 'replay-details' test_replay.pk %}" class="card-link">
+
                     <div class="card">
                         {% if test_replay.video_url %}
-                        <div class="video-wrapper">{% video test_replay.video_url '500x300' %}</div>
-                    {% elif test_replay.video_upload %}
-                        <video src="{{ test_replay.video_upload.url }}" controls></video>
-                    {% endif %}
-                    <div class="card-body">
-                        <h3 class="card-title">{{ test_replay.title }}</h3>
-                        <p class="card-text">{{ test_replay.description }}</p>
-                        <p class="card-text author">Author: {{ test_replay.author.appuserprofile.username }}</p>
-                        <p class="card-text likes">Likes: {{ test_replay.like_set.count }}</p>
+                            <div class="video-wrapper">{% video test_replay.video_url %}</div>
+                        {% elif test_replay.video_upload %}
+                            <video class="video-wrapper" src="{{ test_replay.video_upload.url }}" controls></video>
+                        {% endif %}
+                        <hr>
+                        <div class="card-body">
+                            <h3 class="card-title">{{ test_replay.title }}</h3>
+                            <p class="card-text">{{ test_replay.description }}</p>
+                            <p class="card-text author">Author: {{ test_replay.author.appuserprofile.username }}</p>
+                            <p class="card-text likes">Likes: {{ test_replay.like_set.count }}</p>
+                        </div>
                     </div>
-                </div>
                 </a>
             {% endfor %}
         </div>

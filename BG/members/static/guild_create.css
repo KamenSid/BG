@@ -4,7 +4,7 @@
     padding: 20px;
     border-radius: 5px;
     background-color: #263238;
-    color: white;
+    color: gold;
     text-align: center;
 
 }
@@ -12,7 +12,7 @@
 .container-guild-create {
     margin-bottom: 20px;
     text-align: center;
-    color: gold;
+    color: #F5F5F5;
 }
 
 .container-guild-create form {
@@ -53,8 +53,9 @@
     color: gold;
 }
 
-.container-guild-create h2 {
-    margin-top: 20px;
+.container-guild-create h1 {
+    margin: 20px;
     text-align: center;
+    color: gold;
 
 }

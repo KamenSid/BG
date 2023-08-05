@@ -65,4 +65,11 @@
 }
 
 
+.add-members-link {
+    text-decoration: none;
+    color: #F5F5F5;
+}
 
+.add-members-link:hover {
+    color: gold;
+}

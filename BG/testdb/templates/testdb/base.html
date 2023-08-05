@@ -78,12 +78,14 @@
 {% block content %}
 {% endblock %}
 {% block footer %}
-    <h3>Recently watched replays:</h3>
-    <ul>
+    <hr>
+    <h5>Recently watched replays:</h5>
+    <ul >
         {% for replay_info in request.session.history %}
-            <li><a href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a></li>
+            <li class="recently-watched"><a class="recent-link" href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a></li>
         {% endfor %}
     </ul>
+    <hr>
     <div style="text-align: center">
         <br>
         <p>Developed for the final exam in the 'Python web framework' course at SoftUni by Kamen Siderov - 2023.</p>
