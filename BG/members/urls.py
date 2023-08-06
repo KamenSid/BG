@@ -1,15 +1,15 @@
 from django.urls import path, include
 from BG.members import views
-from BG.testdb.views import ReplayDeleteView, ReplayDetailsView
+
 
 urlpatterns = [
 
     # Template views
-    path("delete/<int:pk>", ReplayDeleteView.as_view(), name="replay-delete"),
-    path("details/<int:pk>", ReplayDetailsView.as_view(), name="replay-details"),
+    path("delete/<int:pk>", views.ReplayDeleteView.as_view(), name="replay-delete"),
+    path("details/<int:pk>", views.ReplayDetailsView.as_view(), name="replay-details"),
 
     path("upload/", views.UploadReplayView.as_view(), name="upload-replay"),
-    path("update/<int:replay_pk>/", views.update_replay, name="update-replay"),
+    path("update/<int:pk>/", views.UpdateReplayView.as_view(), name="update-replay"),
     path("like/<int:replay_pk>/", views.like_replay, name="like-replay"),
     path("profile/<int:pk>/", include([
         path('', views.ProfileView.as_view(), name="profile-details"),

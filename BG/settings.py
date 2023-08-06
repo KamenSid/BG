@@ -14,13 +14,15 @@ CSRF_TRUSTED_ORIGINS = [f'http://{x}:81' for x in os.environ.get('ALLOWED_HOSTS'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', None),
-        'USER': os.getenv('DB_USER', None),
-        'PASSWORD': os.getenv('DB_PASSWORD', None),
+        'NAME': os.getenv('DB_NAME', 'test_database'),
+        'USER': os.getenv('DB_USER', 'kamen'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'kamsid'),
         'HOST': os.getenv('DB_HOST', None),
         'PORT': os.getenv('DB_PORT', None),
     }
 }
+
+TEST_DATABASE_PREFIX = 'test_'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -12,7 +12,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from .serializers import ReplaySerializer
 from BG.testdb.models import Replay
 from BG.members.models import AppUserProfile, Guild, Like
-from BG.forms import CreateReplay, AppUserProfileForm
+from BG.forms import CreateReplay, AppUserProfileForm, CommentInputForm, DeleteReplayForm
 from BG.members.forms import GuildForm, GuildInviteForm, EditGuildForm, GuildRemoveForm
 from steam import Steam
 
@@ -39,7 +39,7 @@ def update_replay(request, replay_pk):
         "replay_name": replay.title,
         "form": form
     }
-    return render(request, template_name="members/update_replay.html", context=context)
+    return render(request, template_name="members/replay_update.html", context=context)
 
 
 @login_required
@@ -100,12 +100,64 @@ def guild_add_members(request):
 class UploadReplayView(LoginRequiredMixin, CreateView):
     model = Replay
     form_class = CreateReplay
-    template_name = 'members/upload_replay.html'
+    template_name = 'members/replay_upload.html'
     success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # Setting the author as the user uploading the replay
         return super().form_valid(form)
+
+
+class ReplayDeleteView(LoginRequiredMixin, DeleteView):
+    model = Replay
+    template_name = "members/replay_delete.html"
+    form_class = DeleteReplayForm
+
+    def get_success_url(self):
+        return reverse_lazy("profile-details", kwargs={"pk": self.request.user.pk})
+
+
+class ReplayDetailsView(DetailView):
+    model = Replay
+    template_name = "members/replay_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # History setup
+        MAX_HISTORY = 5
+        history = self.request.session.get('history', [])
+        replay_info = {'title': self.object.title,
+                       'pk': self.object.pk
+                       }
+        if replay_info in history:
+            history.remove(replay_info)
+        history.insert(0, replay_info)
+        self.request.session['history'] = history[:MAX_HISTORY]
+
+        context['comment_form'] = CommentInputForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentInputForm(request.POST)
+        self.object = self.get_object()
+
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.replay = self.object
+            new_comment.save()
+            return redirect('replay-details', pk=self.object.pk)
+        else:
+            context = self.get_context_data()
+            context['comment_form'] = form
+            return self.render_to_response(context)
+
+
+class UpdateReplayView(LoginRequiredMixin, UpdateView):
+    model = Replay
+    form_class = CreateReplay
+    template_name = "members/replay_update.html"
+    success_url = reverse_lazy("index")
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
@@ -157,7 +209,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     model = AppUserProfile
     form_class = AppUserProfileForm
-    template_name = 'members/update_profile.html'
+    template_name = 'members/profile_update.html'
 
     def get_object(self, queryset=None):
         return get_object_or_404(AppUserProfile, app_user_id=self.request.user.id)

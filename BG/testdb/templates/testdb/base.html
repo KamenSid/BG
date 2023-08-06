@@ -8,6 +8,7 @@
         crossorigin="anonymous"></script>
 <link href="{% static 'index.css' %}" rel="stylesheet">
 <head>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     {% block menu %}
@@ -80,9 +81,11 @@
 {% block footer %}
     <hr>
     <h5>Recently watched replays:</h5>
-    <ul >
+    <ul>
         {% for replay_info in request.session.history %}
-            <li class="recently-watched"><a class="recent-link" href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a></li>
+            <li class="recently-watched"><a class="recent-link"
+                                            href="{% url 'replay-details' replay_info.pk %}">{{ replay_info.title }}</a>
+            </li>
         {% endfor %}
     </ul>
     <hr>
