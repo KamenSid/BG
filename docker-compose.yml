@@ -1,6 +1,7 @@
 version: '3'
 services:
   app:
+    image: biggames
     build: .
     command: gunicorn --bind=0.0.0.0:8000 BG.wsgi:application
     volumes:
@@ -10,9 +11,9 @@ services:
     env_file:
       - envs/.env.deploy
     depends_on:
-      - db
+      - postgres
 
-  db:
+  postgres:
     image: postgres
     restart: always
     ports:

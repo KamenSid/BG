@@ -41,10 +41,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href={% url "upload-replay" %}>Add Replay</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href={% url "guild-details" request.user.appuserprofile.guild.pk %}>
-                                    Guild</a>
-                            </li>
+                            {% if request.user.appuserprofile.guild_id %}
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       href={% url "guild-details" request.user.appuserprofile.guild_id %}>
+                                        Guild</a>
+                                </li>
+                            {% endif %}
                             {% if user.is_superuser %}
                                 <li class="nav-item">
                                     <a class="nav-link" href={% url "guild-create" %}>CreateGuild</a>
