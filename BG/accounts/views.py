@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from BG.accounts.forms import AppUserCreationForm
+from BG.accounts.forms import AppUserCreationForm, CustomPasswordChangeForm
 
 
 class LogInUserView(LoginView):
@@ -29,3 +30,9 @@ class RegisterUserView(CreateView):
 
         messages.success(self.request, 'Registration success!')
         return response
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'registration/password_change_form.html'
+    form_class = CustomPasswordChangeForm
+    success_url = '/'

@@ -38,7 +38,7 @@ class AppUserProfile(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey(AppUser, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     replay = models.ForeignKey(Replay, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

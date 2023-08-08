@@ -3,6 +3,8 @@ from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -20,26 +22,6 @@ AppUser = get_user_model()
 
 with open("steam_api.txt", "r") as file:
     STEAM_KEY = file.read().strip()
-
-
-def get_profile(user):
-    profile = get_object_or_404(AppUserProfile, app_user_id=user.id)
-    return profile
-
-
-@login_required
-def update_replay(request, replay_pk):
-    replay = get_object_or_404(Replay, pk=replay_pk)
-    form = CreateReplay(request.POST or None, instance=replay)
-
-    if form.is_valid():
-        form.save()
-        return redirect("index")
-    context = {
-        "replay_name": replay.title,
-        "form": form
-    }
-    return render(request, template_name="members/replay_update.html", context=context)
 
 
 @login_required
@@ -116,6 +98,12 @@ class ReplayDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy("profile-details", kwargs={"pk": self.request.user.pk})
 
+    def dispatch(self, request, *args, **kwargs):
+        replay = self.get_object()
+        if replay.author != self.request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
 
 class ReplayDetailsView(DetailView):
     model = Replay
@@ -158,6 +146,12 @@ class UpdateReplayView(LoginRequiredMixin, UpdateView):
     form_class = CreateReplay
     template_name = "members/replay_update.html"
     success_url = reverse_lazy("index")
+
+    def dispatch(self, request, *args, **kwargs):
+        replay = self.get_object()
+        if replay.author != self.request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
@@ -268,7 +262,10 @@ class EditGuildView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         guild_obj = self.request.user.guild.first()
-        return guild_obj
+        if self.request.user == guild_obj.leader:
+            return guild_obj
+        else:
+            raise PermissionDenied
 
     def form_valid(self, form):
         guild = self.object

@@ -4,7 +4,6 @@ from BG.members import views
 
 urlpatterns = [
 
-    # Template views
     path("delete/<int:pk>", views.ReplayDeleteView.as_view(), name="replay-delete"),
     path("details/<int:pk>", views.ReplayDetailsView.as_view(), name="replay-details"),
 

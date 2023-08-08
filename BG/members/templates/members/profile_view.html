@@ -16,6 +16,7 @@
         <div class="edit-profile-button">
             <a href="{% url 'update-profile' appuser.pk %}" class="btn btn-primary">Edit Profile</a>
             <a href="{% url 'profile-delete' appuser.pk %}" class="btn btn-primary">Delete Profile</a>
+            <a href="{% url 'password-change' %}" class="btn btn-primary">Change Password</a>
         </div>
     {% endif %}
 
