@@ -22,6 +22,7 @@
                 {% endif %}
             <p class="replay-game">Game: {{ replay.game }}</p>
         </div>
+    <hr>
         {% if replay.video_url  %}
             <div class="replay-video">
                 {% video replay.video_url "large" %}
@@ -31,6 +32,7 @@
                 <video style="scale: 50%" src="{{ replay.video_upload.url }}" controls></video>
             </div>
         {% endif %}
+    <hr>
         <div class="replay-description">
             <p>{{ replay.description }}</p>
         </div>
@@ -42,15 +44,10 @@
         </div>
         <div>
             {% if user.is_authenticated %}
-                <a href="{% url 'like-replay' replay.pk %}">
-                    <button class="replay-likes-button">Like</button>
-                </a>
+                <a  class="replay-likes-button" href="{% url 'like-replay' replay.pk %}">Like</a>
                 {% if user == replay.author %}
-                    <a href="{% url 'replay-delete' replay.pk %}">
-                        <button class="replay-delete-button">Delete</button>
-                    </a>
+                    <a class="replay-likes-button" href="{% url 'replay-delete' replay.pk %}">Delete</a>
                 {% endif %}
-
                 </div>
                 <div class="comment-section">
                     <div class="comment-form">

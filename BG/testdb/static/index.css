@@ -16,9 +16,9 @@ body {
 
 h1 {
     font-size: 3rem;
-    color: #fff;
+    color: gold;
     text-align: center;
-    padding: 20px;
+    padding: 10px;
     background-color: #262;
     border-radius: 10px;
 }

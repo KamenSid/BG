@@ -4,6 +4,7 @@
 {% block title %} Search {% endblock %}
 {% block content %}
     <link href="{% static 'search.css' %}" rel="stylesheet">
+    <h1>Search Replays</h1>
     <div class="search-container">
         <form method="GET" action="{% url 'search' %}">
             {% csrf_token %}
@@ -26,7 +27,6 @@
                     </li>
                 {% endfor %}
             </ul>
-
         {% else %}
             <p class="no-results">No results found.</p>
         {% endif %}

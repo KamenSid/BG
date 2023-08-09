@@ -73,22 +73,16 @@
             <h3>No replays uploaded.</h3>
         {% endif %}
     </div>
-
+    <br>
     <div class="section">
-        <h2 class="section-title">Liked Replays</h2>
+    <h2 class="section-title">Liked Replays</h2>
+    <div class="liked-replays">
         {% if liked_replays %}
-            <table class="liked-replays-table">
-                {% for replay in liked_replays %}
-                    <tr class="replay-row">
-                        <td class="replay-thumbnail">{% video replay.video_url 'small' %}</td>
-                        <td class="replay-details">
-                            <h3 class="replay-title">{{ replay.title }}</h3>
-                            <p class="replay-info">Uploaded by: {{ replay.author.appuserprofile.username }}</p>
-                            <p class="replay-info">Game: {{ replay.game }}</p>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            {% for replay in liked_replays %}
+                <a class="replay-like" href="{% url 'replay-details' replay.pk %}">{{ replay.title }} </a>
+                <p>Posted by: {{ replay.author.appuserprofile.username }} Likes: {{ replay.like_set.count }} | </p>
+                <hr>
+            {% endfor %}
         {% else %}
             <h3>No liked replays.</h3>
         {% endif %}

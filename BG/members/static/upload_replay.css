@@ -1,12 +1,11 @@
 .container-upload {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 30px auto;
     padding: 20px;
     border-radius: 5px;
     background-color: #263238;
     color: white;
     text-align: center;
-
 }
 
 .container-upload h1 {
@@ -22,7 +21,6 @@
     gap: 10px;
     font-weight: bold;
     text-align: center;
-
 }
 
 .container-upload label {
@@ -32,7 +30,6 @@
 
 .container-upload input[type="text"],
 .container-upload input[type="file"] {
-
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -55,5 +52,4 @@
 .container-upload h2 {
     margin-top: 20px;
     text-align: center;
-
 }

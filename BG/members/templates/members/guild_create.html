@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
     <link href="{% static 'guild_create.css' %}" rel="stylesheet">
+    <h1>You are about to create a guild</h1>
     <div class="container-guild-create">
-        <h1 class="mb-4">You are about to create a guild</h1>
         <form action="{% url 'guild-create' %}" method="post">
             {% csrf_token %}
             {{ form.as_div }}

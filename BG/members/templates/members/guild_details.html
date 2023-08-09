@@ -3,17 +3,12 @@
 
 {% block content %}
     <link href="{% static 'guild_details.css' %}" rel="stylesheet">
+    <h1>{{ object.name }}</h1>
     <div class="guild-details-container">
         {% if guild %}
-            <h2 class="guild-name">{{ object.name }}</h2>
             <div class="guild-info">
-                <h3>Leader:</h3>
-                <ul class="guild-members-list">
-                    <li>
-                        <a class="member-link"
-                           href="{% url 'profile-details' object.leader.pk %}">{{ object.leader.appuserprofile.username }}</a>
-                    </li>
-                </ul>
+                <h3>Leader: <a class="member-link" href="{% url 'profile-details' object.leader.pk %}">{{ object.leader.appuserprofile.username }}</a></h3>
+                <hr>
                 <h4>Members:</h4>
                 <ul class="guild-members-list">
                     {% for member in members %}
@@ -32,6 +27,7 @@
                             <br>
                             Posted by: {{ replay.author.appuserprofile.username }} | Likes: {{ replay.like_set.count }}
                         </li>
+                        <hr>
                     {% endfor %}
                 </ul>
                 <p>Total Guild Likes: {{ total_guild_likes }}</p>

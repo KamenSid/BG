@@ -112,8 +112,7 @@
 }
 
 /* Replays Table */
-.replays-table,
-.liked-replays-table {
+.replays-table {
     width: 100%;
     border-collapse: collapse;
 }
@@ -153,4 +152,27 @@
     background: #45a049;
 }
 
+.section-title {
+    color: gold;
+}
 
+.section .replay-like {
+    text-decoration: none;
+    background: #262;
+    color: #F5F5F5;
+    margin: 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.section .replay-like:hover {
+    background: #6eff71;
+    color: gold;
+}
+
+.liked-replays {
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+}

@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.views.generic import ListView, FormView
 
 from .models import Replay
@@ -8,6 +9,11 @@ class IndexView(ListView):
     model = Replay
     template_name = 'testdb/index.html'
     context_object_name = 'test_replays'
+
+    def get_queryset(self):
+        replays = Replay.objects.annotate(like_count=Count('like')).order_by('-like_count', 'title')
+
+        return replays
 
 
 class SearchView(FormView):

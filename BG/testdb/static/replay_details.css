@@ -29,10 +29,22 @@
     margin-bottom: 10px;
 }
 
+.replay-author a {
+    text-decoration: none;
+    color: #F5F5F5;
+}
+
+.replay-author a:hover {
+    color: gold;
+    background-color: #262;
+    border-radius: 5px;
+}
+
 .replay-author,
 .replay-game {
-    font-size: 14px;
+    font-size: 18px;
     color: gold;
+
 }
 
 .replay-video {
@@ -46,16 +58,18 @@
 
 .replay-description p {
     position: relative;
-    font-size: 16px;
+    font-size: 18px;
     color: gold;
     line-height: 1.5;
+    text-align: center;
 }
+
 
 .replay-likes {
     display: flex;
     align-items: center;
     margin-top: 20px;
-    justify-content: space-between;
+    justify-content: left;
 }
 
 .replay-likes-button {
@@ -64,7 +78,8 @@
     border-radius: 5px;
     cursor: pointer;
     border: none;
-
+    text-decoration: none;
+    padding: 10px;
 }
 
 .replay-likes-button:hover {
@@ -117,8 +132,8 @@
     margin-bottom: 5px;
 }
 
-.comment-section .comment-form input,
-.comment-section .comment-form textarea {
+.comment-section .comment-form input
+ {
     width: 100%;
     height: 100px;
     padding: 10px;
@@ -145,7 +160,6 @@
 }
 
 .comment-section ul li:before {
-    content: '\2022';
     color: #333;
     font-weight: bold;
     display: inline-block;
