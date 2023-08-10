@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from BG.members.views import ReplayDetailAPIView, ReplayListAPIView, replay_list_frontend_view
-from BG.testdb.views import IndexView
+from BG.testdb.views import IndexView, error_404, error_500
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
@@ -23,6 +23,12 @@ urlpatterns = [
          ),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Setup of the custom admin site
 admin.site.site_header = "BG Admin"
 admin.site.site_title = "BiGGameS Admin Portal"
 admin.site.index_title = "Welcome to BiGGameS"
+
+# Setup of the custom 404 and 500 pages.
+handler404 = error_404
+handler500 = error_500

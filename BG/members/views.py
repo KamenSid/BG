@@ -4,9 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
-from django.shortcuts import render, redirect
-from django.shortcuts import get_object_or_404
+from django.db.models import Count
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from rest_framework import generics
@@ -22,6 +21,18 @@ AppUser = get_user_model()
 
 with open("steam_api.txt", "r") as file:
     STEAM_KEY = file.read().strip()
+
+
+class InfoMixin:
+    @staticmethod
+    def guilds_ranking():
+        ranking = Guild.objects.annotate(total_likes=Count('members__replay__like')).order_by('-total_likes')
+        return ranking
+
+    @staticmethod
+    def replays_ranking():
+        ranking = Replay.objects.annotate(like_count=Count('like')).order_by('-like_count', 'title')
+        return ranking
 
 
 @login_required
@@ -234,25 +245,30 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class GuildDetailsView(LoginRequiredMixin, DetailView):
+class GuildDetailsView(LoginRequiredMixin, DetailView, InfoMixin):
     model = Guild
     template_name = 'members/guild_details.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         if self.object:
             members = self.object.members.all()
             replays_by_guild_members = Replay.objects.filter(author__in=members)
             total_guild_likes = 0
+            guilds_with_likes = self.guilds_ranking()[:5]
+
             for replay in replays_by_guild_members:
                 total_guild_likes += replay.like_set.count()
             user_is_leader = self.object.leader == self.request.user
+
             context['replays_by_members'] = replays_by_guild_members
             context['total_guild_likes'] = total_guild_likes
             context['members'] = members
             context['user_is_leader'] = user_is_leader
+            context['guilds_with_likes'] = guilds_with_likes
 
-        return context
+            return context
 
 
 class EditGuildView(LoginRequiredMixin, UpdateView):

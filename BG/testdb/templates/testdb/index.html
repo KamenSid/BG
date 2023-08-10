@@ -12,7 +12,6 @@
     <div class="container">
         <header class="header">
         </header>
-
         <div class="card-container">
             {% for test_replay in test_replays %}
                 <a href="{% url 'replay-details' test_replay.pk %}" class="card-link">
@@ -33,6 +32,24 @@
                     </div>
                 </a>
             {% endfor %}
+        </div>
+        <div class="floating-window-guilds">
+            <h2>Guilds Ranking</h2>
+            <ol>
+                {% for guild in guild_ranking %}
+                    <li>{{ guild.name }}: {{ guild.total_likes }}</li>
+                    <hr>
+                {% endfor %}
+            </ol>
+            <div>
+                <h2>Replay Ranking:</h2>
+                <ol>
+                    {% for replay in replays_ranking %}
+                        <li>{{ replay.title }} by {{ replay.author.appuserprofile.username }} - {{ replay.like_set.count }}</li>
+                        <hr>
+                    {% endfor %}
+                </ol>
+            </div>
         </div>
     </div>
 {% endblock %}

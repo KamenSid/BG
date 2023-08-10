@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: biggames
+    image: kamsid/biggames
     build: .
     command: gunicorn --bind=0.0.0.0:8000 BG.wsgi:application
     volumes:
@@ -12,7 +12,6 @@ services:
       - envs/.env.deploy
     depends_on:
       - postgres
-
   postgres:
     image: postgres
     restart: always
@@ -25,7 +24,6 @@ services:
       - PGDATA:/var/lib/postgresql/data/pgdata
     volumes:
       - ./postgresql:/var/lib/postgresql/data
-
   nginx:
     image: nginx
     ports:

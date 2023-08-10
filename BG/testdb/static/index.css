@@ -2,7 +2,8 @@
 body {
     font-family: Arial, sans-serif;
     background-image: url('images/zane-lee-IHj0xtWtLKE-unsplash.jpg');
-    background-size: contain;
+    background-size: 100%;
+    background-position: center;
     margin: 0;
     padding: 0;
     color: #fff;
@@ -149,4 +150,31 @@ h1 {
 
 .recent-link:hover {
     color: gold;
+}
+
+/* Floating Guild Ranking */
+
+.floating-window-guilds {
+    position: fixed;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: #263238;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.floating-window-guilds h2 {
+    margin-top: 0;
+    color: gold;
+}
+
+.floating-window-guilds ul {
+    list-style: none;
+    padding: 0;
+}
+
+.floating-window-guilds li {
+    margin: 8px;
 }
