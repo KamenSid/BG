@@ -34,7 +34,8 @@
             {% endfor %}
         </div>
         <div class="floating-window-guilds">
-            <h2>Guilds Ranking</h2>
+            <h2>Guild Ranking</h2>
+            <hr>
             <ol>
                 {% for guild in guild_ranking %}
                     <li>{{ guild.name }}: {{ guild.total_likes }}</li>
@@ -42,10 +43,12 @@
                 {% endfor %}
             </ol>
             <div>
-                <h2>Replay Ranking:</h2>
+                <h2>Replay Ranking</h2>
+                <hr>
                 <ol>
                     {% for replay in replays_ranking %}
-                        <li>{{ replay.title }} by {{ replay.author.appuserprofile.username }} - {{ replay.like_set.count }}</li>
+                        <li>{{ replay.title }} by {{ replay.author.appuserprofile.username }}
+                            - {{ replay.like_set.count }}</li>
                         <hr>
                     {% endfor %}
                 </ol>
