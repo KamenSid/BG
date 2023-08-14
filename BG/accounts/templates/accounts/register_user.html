@@ -9,13 +9,9 @@
     <link href="{% static 'register_user.css' %}" rel="stylesheet">
     <div class="container-register">
         {% if form.errors %}
-
             <div class="alert alert-danger" role="alert">
                 There was an error with your registration!
             </div>
-            {% for error in form.errors %}
-                {{ error }}
-            {% endfor %}
         {% endif %}
         <h1 class="mb-4">Hello, you are about to register</h1>
 
@@ -24,14 +20,23 @@
             <div class="form-group">
                 <label for="{{ form.email.id_for_label }}">Email</label>
                 {{ form.email }}
+                {% for error in form.errors.email %}
+                    {{ error }}
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label for="{{ form.password1.id_for_label }}">Password</label>
                 {{ form.password1 }}
+                {% for error in form.errors.password1 %}
+                    {{ error }}
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
                 {{ form.password2 }}
+                {% for error in form.errors.password2 %}
+                    {{ error }}
+                {% endfor %}
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>

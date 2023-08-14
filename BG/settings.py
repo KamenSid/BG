@@ -5,8 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure--)ubmle3!hlyxaywf%wti!*biwuzr15ib2!e*k*ye_dlu0$-+2'
 
-DEBUG = os.environ.get('DEBUG') == "True"
-
+DEBUG = False
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 
 CSRF_TRUSTED_ORIGINS = [f'http://{x}:81' for x in os.environ.get('ALLOWED_HOSTS', '').split(' ')]
